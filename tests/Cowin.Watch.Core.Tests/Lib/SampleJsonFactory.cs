@@ -21,7 +21,7 @@ namespace Cowin.Watch.Core.Tests.Lib
       ""district_name_l"": """",
       ""block_name"": ""Jaoli"",
       ""block_name_l"": """",
-      ""pincode"": ""413608"",
+      ""pincode"": 413608,
       ""lat"": 28.7,
       ""long"": 77.1,
       ""from"": ""09:00:00"",

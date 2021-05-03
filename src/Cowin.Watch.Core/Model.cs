@@ -65,7 +65,7 @@ namespace Cowin.Watch.Core
         public string BlockNameL { get;  set; }
 
         [JsonPropertyName("pincode")]
-        public string Pincode { get;  set; }
+        public long Pincode { get;  set; }
 
         [JsonPropertyName("lat")]
         public double Lat { get;  set; }
