@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Cowin.Watch.Core.ApiClient
 {
     public interface ICowinApiClient
     {
-        object GetSessionsForDistrictAndDate(int districtId, DateTimeOffset dateFrom);
+        Task<Root> GetSessionsForDistrictAndDateAsync(int districtId, DateTimeOffset dateFrom);
     }
 }

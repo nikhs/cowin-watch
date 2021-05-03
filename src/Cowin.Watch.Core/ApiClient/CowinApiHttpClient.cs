@@ -1,6 +1,9 @@
 ﻿using Cowin.Watch.Core.ApiClient;
 using System;
+using System.Net;
 using System.Net.Http;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace Cowin.Watch.Core
 {
@@ -13,9 +16,29 @@ namespace Cowin.Watch.Core
             this.httpClient = httpClient;
         }
 
-        public object GetSessionsForDistrictAndDate(int districtId, DateTimeOffset dateFrom)
+        public async Task<Root> GetSessionsForDistrictAndDateAsync(int districtId, DateTimeOffset dateFrom)
         {
-            throw new NotImplementedException();
+            string requestUri = $"appointment/sessions/public/calendarByDistrict?district_id={districtId}&date={dateFrom:d}";
+            using (HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, requestUri)) 
+            {
+                var response = await httpClient.SendAsync(hrm);
+
+                if (!response.IsSuccessStatusCode) {
+                    if (response.StatusCode == HttpStatusCode.Unauthorized) {
+                        throw new UnauthorizedAPIAccessException();
+                    }
+                    else if (response.StatusCode == HttpStatusCode.NotFound) {
+                        throw new NotFoundAPIException();
+                    }
+                }
+
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                if (response.Content.Headers.ContentType.MediaType == "application/json")
+                    return JsonSerializer.Deserialize<Root>(responseContent);
+                return null;
+            }
+                
         }
     }
 }
