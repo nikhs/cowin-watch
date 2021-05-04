@@ -1,6 +1,7 @@
 ﻿using Cowin.Watch.Core.ApiClient;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,11 +24,15 @@ namespace Cowin.Watch.Core.Tests
 
     public class LiveClientFactory
     {
-        public static ICowinApiClient GetClient() =>
-            new CowinApiHttpClient(new System.Net.Http.HttpClient()
-            {
-                BaseAddress = new Uri("https://cdn-api.co-vin.in/api/v2/"),
-                Timeout = TimeSpan.FromSeconds(30)
-            });
+        static readonly HttpClient liveHttpClient = new HttpClient()
+        {
+            BaseAddress = new Uri("https://cdn-api.co-vin.in/api/v2/"),
+            Timeout = TimeSpan.FromSeconds(30)
+        };
+
+        public static ICowinApiClient GetClient()
+        {
+            return new CowinApiHttpClient(liveHttpClient);
+        }
     }
 }
