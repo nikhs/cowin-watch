@@ -3,6 +3,7 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Cowin.Watch.Core
@@ -16,12 +17,12 @@ namespace Cowin.Watch.Core
             this.httpClient = httpClient;
         }
 
-        public async Task<Root> GetSessionsForDistrictAndDateAsync(int districtId, DateTimeOffset dateFrom)
+        public async Task<Root> GetSessionsForDistrictAndDateAsync(int districtId, DateTimeOffset dateFrom, CancellationToken cancellationToken)
         {
             string requestUri = $"appointment/sessions/public/calendarByDistrict?district_id={districtId}&date={dateFrom:d}";
             using (HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, requestUri)) 
             {
-                var response = await httpClient.SendAsync(hrm);
+                var response = await httpClient.SendAsync(hrm, cancellationToken);
 
                 if (!response.IsSuccessStatusCode) {
                     if (response.StatusCode == HttpStatusCode.Unauthorized) {
@@ -33,10 +34,11 @@ namespace Cowin.Watch.Core
                 }
 
                 string responseContent = await response.Content.ReadAsStringAsync();
-
-                if (response.Content.Headers.ContentType.MediaType == "application/json")
-                    return JsonSerializer.Deserialize<Root>(responseContent);
-                return null;
+                if (response.Content.Headers.ContentType.MediaType != "application/json") 
+                {
+                    throw new UnexpectedResponseException();
+                }
+                return JsonSerializer.Deserialize<Root>(responseContent);
             }
                 
         }

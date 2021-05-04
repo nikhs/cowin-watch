@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Cowin.Watch.Core.Tests
@@ -21,7 +22,7 @@ namespace Cowin.Watch.Core.Tests
             var districtId = 15; var dateFrom = DateTimeOffset.Parse("04-May-2021");
             var cowinApiClient = ClientFactory.GetHandlerFor_204();
             
-            Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await cowinApiClient.GetSessionsForDistrictAndDateAsync(districtId, dateFrom));
+            Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await cowinApiClient.GetSessionsForDistrictAndDateAsync(districtId, dateFrom, CancellationToken.None));
         }
 
         [TestMethod]
@@ -31,9 +32,19 @@ namespace Cowin.Watch.Core.Tests
             string content = SampleJsonFactory.GetCentersApiResponseJson();
             var cowinApiClient = ClientFactory.GetHandlerFor_200(content);
             
-            Root actualResponse = await cowinApiClient.GetSessionsForDistrictAndDateAsync(districtId, dateFrom);
-
+            Root actualResponse = await cowinApiClient.GetSessionsForDistrictAndDateAsync(districtId, dateFrom, CancellationToken.None);
             Assert.IsNotNull(actualResponse);
+        }
+
+        [TestMethod]
+        public void When_Request_Is_Cancelled_An_AggregateException_Is_Thrown()
+        {
+            var districtId = 15; var dateFrom = DateTimeOffset.Parse("04-May-2021");
+            var cowinApiClient = ClientFactory.GetHandlerFor_DelayedResponse();
+            var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+                
+            Assert.ThrowsExceptionAsync<AggregateException>(async () => 
+                await cowinApiClient.GetSessionsForDistrictAndDateAsync(districtId, dateFrom, cancellationTokenSource.Token));
         }
     }
 
@@ -47,6 +58,9 @@ namespace Cowin.Watch.Core.Tests
 
         public static ICowinApiClient GetHandlerFor_200<TContent>(TContent content) =>
             new CowinApiHttpClient(GetDefaultHttpClient(OkResponseHandler<TContent>.ForContent<TContent>(content)));
+
+        public static ICowinApiClient GetHandlerFor_DelayedResponse() =>
+            new CowinApiHttpClient(GetDefaultHttpClient(DelayedResponseHandler.Instance));
 
         public static HttpClient GetDefaultHttpClient(HttpMessageHandler httpMessageHandler) =>
             new HttpClient(httpMessageHandler)

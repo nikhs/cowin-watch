@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Cowin.Watch.Core.Tests
@@ -17,7 +18,7 @@ namespace Cowin.Watch.Core.Tests
             var client = LiveClientFactory.GetClient();
             var districtId = 15; var dateFrom = DateTimeOffset.Parse("04-May-2021");
 
-            var response = await client.GetSessionsForDistrictAndDateAsync(districtId, dateFrom);
+            var response = await client.GetSessionsForDistrictAndDateAsync(districtId, dateFrom, CancellationToken.None);
             Assert.IsNotNull(response);
         }
     }
