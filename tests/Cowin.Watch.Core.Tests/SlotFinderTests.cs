@@ -4,17 +4,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Cowin.Watch.Core.Tests
 {
     [TestClass]
-    class SlotFinderTests
+    public class SlotFinderTests
     {
         [TestMethod]
         public void When_Searching_By_Invalid_Districtid_Throws_Exception()
         {
             var invalidDistrictId = -1;
-            Assert.ThrowsException<ArgumentException>(() => DistrictId.FromLong(invalidDistrictId));
+            Assert.ThrowsException<ArgumentException>(() => DistrictId.FromInt(invalidDistrictId));
         }
 
         //[TestMethod]
@@ -25,55 +26,67 @@ namespace Cowin.Watch.Core.Tests
         //}
 
         [TestMethod]
-        public void When_Searching_By_Valid_DistrictId_And_Date_Result_Is_Valid()
+        public async Task When_Searching_By_Valid_DistrictId_And_Date_Result_Is_ValidAsync()
         {
             var validDistrictId = 56;
             var validDateTime = DateTimeOffset.Parse("2-May-2021");
-            var cowinApiClient = ClientFactory.GetHandlerFor_204() as CowinApiHttpClient;
-            var slotFinder = GetSlotFinderForDistrict(cowinApiClient, DistrictId.FromLong(validDistrictId));
 
-            Root actualResult = slotFinder.FindForDate(validDateTime);
+            var responseJson = SampleJsonFactory.GetCentersApiResponseJson();
+            var cowinApiClient = ClientFactory.GetHandlerFor_200(responseJson) as CowinApiHttpClient;
+            var slotFinder = GetSlotFinderForDistrict(cowinApiClient, validDistrictId);
+
+            var actualResult = await slotFinder.GetAvailableSlotsForDateAsync(validDateTime);
             Assert.IsNotNull(actualResult);
         }
 
         [TestMethod]
-        public void When_Searching_By_Valid_DistrictId_And_Vaccine_Result_Is_Valid()
+        public async Task When_Searching_By_Valid_DistrictId_And_Vaccine_Result_Is_ValidAsync()
         {
             var validDistrictId = 56;
             var validDateTime = DateTimeOffset.Parse("2-May-2021");
 
-            var cowinApiClient = ClientFactory.GetHandlerFor_204() as CowinApiHttpClient;
-            var slotFinder = GetSlotFinderForDistrict(cowinApiClient, DistrictId.FromLong(validDistrictId));
+            var responseJson = SampleJsonFactory.GetCentersApiResponseJson();
+            var cowinApiClient = ClientFactory.GetHandlerFor_200(responseJson) as CowinApiHttpClient;
+            var slotFinder = GetSlotFinderForDistrict(cowinApiClient, validDistrictId);
 
             var expectedVaccine = VaccineType.CovidShield();
-            Root actualResult = slotFinder.FindForDateAndVaccine(validDateTime, expectedVaccine);
+            var actualResult = await slotFinder.GetAvailableSlotsForDateAndVaccineAsync(validDateTime, expectedVaccine);
             Assert.IsNotNull(actualResult);
         }
 
         [TestMethod]
-        public void When_Searching_By_Valid_DistrictId_And_Vaccine_Result_Contains_Only_Valid_Vaccines()
+        public async Task When_Searching_By_Valid_DistrictId_And_Vaccine_Result_Contains_Only_Valid_Vaccines()
         {
             var validDistrictId = 56;
             var validDateTime = DateTimeOffset.Parse("2-May-2021");
 
-            var cowinApiClient = ClientFactory.GetHandlerFor_204() as CowinApiHttpClient;
-            var slotFinder = GetSlotFinderForDistrict(cowinApiClient, DistrictId.FromLong(validDistrictId));
+            var responseJson = SampleJsonFactory.GetCentersApiResponseJson();
+            var cowinApiClient = ClientFactory.GetHandlerFor_200(responseJson) as CowinApiHttpClient;
+            var slotFinder = GetSlotFinderForDistrict(cowinApiClient, validDistrictId);
 
             var expectedVaccine = VaccineType.CovidShield();
-            Root actualResult = slotFinder.FindForDateAndVaccine(validDateTime, expectedVaccine);
+            var actualResult = await slotFinder.GetAvailableSlotsForDateAndVaccineAsync(validDateTime, expectedVaccine);
             Assert.IsTrue(ResultHasExpectedVaccine(actualResult, expectedVaccine));
         }
 
-        private bool ResultHasExpectedVaccine(Root actualResult, object expectedVaccine)
+        private bool ResultHasExpectedVaccine(IEnumerable<Center> actualResult, VaccineType expectedVaccine)
         {
-            return actualResult.Centers
+            return actualResult
                 .Any(c => c.Sessions
-                .Any(s => !VaccineType.IsCovidShield(s.Vaccine)));
+                .All(s => expectedVaccine.Equals(s.Vaccine)));
         }
 
-        private SlotFinderByDistrictId GetSlotFinderForDistrict(CowinApiHttpClient cowinApiClient, DistrictId districtId)
+        private SlotFinderByDistrictId GetSlotFinderForDistrict(CowinApiHttpClient cowinApiClient, int districtId)
         {
-            return new SlotFinderByDistrictId(cowinApiClient, districtId);
+            return new SlotFinderByDistrictId(cowinApiClient, DistrictId.FromInt(districtId));
+        }
+
+        [TestMethod]
+        public void When_COVISHIELD_Is_Compared_To_VaccineType_Returns_True()
+        {
+            var expectedVaccine = VaccineType.CovidShield();
+            var actualString = "COVISHIELD";
+            Assert.IsTrue(expectedVaccine.Equals(actualString));
         }
     }
 }
