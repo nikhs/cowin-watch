@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Cowin.Watch.Core\Cowin.Watch.Core.csproj" />
+    <ProjectReference Include="..\..\src\Cowint.Watch.Function\Cowin.Watch.Function.csproj" />
   </ItemGroup>
 
 </Project>
