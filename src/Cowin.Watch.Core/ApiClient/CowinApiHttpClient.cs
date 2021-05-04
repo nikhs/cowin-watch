@@ -20,8 +20,7 @@ namespace Cowin.Watch.Core
         public async Task<Root> GetSessionsForDistrictAndDateAsync(int districtId, DateTimeOffset dateFrom, CancellationToken cancellationToken)
         {
             string requestUri = $"appointment/sessions/public/calendarByDistrict?district_id={districtId}&date={dateFrom:d}";
-            using (HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, requestUri)) 
-            {
+            using (HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, requestUri)) {
                 var response = await httpClient.SendAsync(hrm, cancellationToken);
 
                 if (!response.IsSuccessStatusCode) {
@@ -34,13 +33,12 @@ namespace Cowin.Watch.Core
                 }
 
                 string responseContent = await response.Content.ReadAsStringAsync();
-                if (response.Content.Headers.ContentType.MediaType != "application/json") 
-                {
+                if (response.Content.Headers.ContentType.MediaType != "application/json") {
                     throw new UnexpectedResponseException();
                 }
                 return JsonSerializer.Deserialize<Root>(responseContent);
             }
-                
+
         }
     }
 }

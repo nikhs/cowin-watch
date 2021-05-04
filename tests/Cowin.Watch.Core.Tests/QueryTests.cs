@@ -3,10 +3,7 @@ using Cowin.Watch.Core.Tests.Lib;
 using Cowin.Watch.Core.Tests.Lib.HttpClientHandler;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,7 +18,7 @@ namespace Cowin.Watch.Core.Tests
         {
             var districtId = 15; var dateFrom = DateTimeOffset.Parse("04-May-2021");
             var cowinApiClient = ClientFactory.GetHandlerFor_204();
-            
+
             Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await cowinApiClient.GetSessionsForDistrictAndDateAsync(districtId, dateFrom, CancellationToken.None));
         }
 
@@ -31,7 +28,7 @@ namespace Cowin.Watch.Core.Tests
             var districtId = 15; var dateFrom = DateTimeOffset.Parse("04-May-2021");
             string content = SampleJsonFactory.GetCentersApiResponseJson();
             var cowinApiClient = ClientFactory.GetHandlerFor_200(content);
-            
+
             Root actualResponse = await cowinApiClient.GetSessionsForDistrictAndDateAsync(districtId, dateFrom, CancellationToken.None);
             Assert.IsNotNull(actualResponse);
         }
@@ -42,15 +39,15 @@ namespace Cowin.Watch.Core.Tests
             var districtId = 15; var dateFrom = DateTimeOffset.Parse("04-May-2021");
             var cowinApiClient = ClientFactory.GetHandlerFor_DelayedResponse();
             var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(2));
-                
-            Assert.ThrowsExceptionAsync<AggregateException>(async () => 
+
+            Assert.ThrowsExceptionAsync<AggregateException>(async () =>
                 await cowinApiClient.GetSessionsForDistrictAndDateAsync(districtId, dateFrom, cancellationTokenSource.Token));
         }
     }
 
     public static class ClientFactory
     {
-        public static ICowinApiClient GetCowinClientForHandler(DelegatingHandler delegatingHandler) => 
+        public static ICowinApiClient GetCowinClientForHandler(DelegatingHandler delegatingHandler) =>
             new CowinApiHttpClient(GetDefaultHttpClient(delegatingHandler));
 
         public static ICowinApiClient GetHandlerFor_204() =>

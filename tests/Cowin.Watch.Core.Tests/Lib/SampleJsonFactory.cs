@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Cowin.Watch.Core.Tests.Lib
+﻿namespace Cowin.Watch.Core.Tests.Lib
 {
     public static class SampleJsonFactory
     {
