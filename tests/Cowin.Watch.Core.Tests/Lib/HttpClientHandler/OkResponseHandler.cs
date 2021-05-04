@@ -1,5 +1,6 @@
 ﻿using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,9 +16,11 @@ namespace Cowin.Watch.Core.Tests.Lib.HttpClientHandler
         }
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
+            var responseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+            responseMessage.Content = content switch
             {
-                Content = JsonContent.Create<TContent>(content)
+                string stringContent => new StringContent(stringContent, new UTF8Encoding(), "application/json"),
+                _ => JsonContent.Create<TContent>(content),
             };
             return Task.FromResult(responseMessage);
         }
