@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Cowin.Watch.Core.Tests
 {
     [TestClass]
-    class WatchFunctionTests
+    public class WatchFunctionTests
     {
         [TestMethod]
         public async Task When_WatchFunction_Starts_Logging_Works()

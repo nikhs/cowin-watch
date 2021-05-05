@@ -24,7 +24,7 @@ namespace Cowin.Watch.Core
                 var response = await httpClient.SendAsync(hrm, cancellationToken);
 
                 if (!response.IsSuccessStatusCode) {
-                    if (response.StatusCode == HttpStatusCode.Unauthorized) {
+                    if (response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden) {
                         throw new UnauthorizedAPIAccessException();
                     }
                     else if (response.StatusCode == HttpStatusCode.NotFound) {
