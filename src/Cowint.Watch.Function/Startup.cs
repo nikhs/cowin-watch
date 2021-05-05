@@ -1,4 +1,5 @@
 ﻿using Cowin.Watch.Core;
+using Cowin.Watch.Function.Config;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Http;
@@ -15,7 +16,7 @@ namespace Cowin.Watch.Function
         {
             builder.Services.AddHttpClient<CowinApiHttpClient>(client => 
             {
-                client.BaseAddress = new Uri(Environment.GetEnvironmentVariable("CowinApi_Base_Url"));
+                client.BaseAddress = EnvVariables.CowinBaseUrl();
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept
                 .Add(new MediaTypeWithQualityHeaderValue("application/json"));
