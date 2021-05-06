@@ -10,41 +10,46 @@ using Microsoft.Extensions.Logging;
 
 namespace Cowin.Watch.Function
 {
-    public static class Watch
+    public class Watch
     {
         private const string STARTWATCH_HTTP = "StartWatch_Http";
+        private readonly SlotFinderByDistrictId slotFinderByDistrictId;
+
+        public Watch(SlotFinderByDistrictId slotFinderByDistrictId)
+        {
+            this.slotFinderByDistrictId = slotFinderByDistrictId ?? throw new ArgumentNullException(nameof(slotFinderByDistrictId));
+        }
 
         [FunctionName(STARTWATCH_HTTP)]
-        public static async Task Run(
+        public async Task Run(
             [TimerTrigger("0 */30 * * * *")] TimerInfo myTimer,
-            ILogger log,
-            SlotFinderByDistrictId SlotFinderByDistrictId)
+            ILogger logger)
         {
-            log.LogInformation($"C# {STARTWATCH_HTTP} function executed at: {DateTime.Now}");
+            logger.LogInformation($"C# {STARTWATCH_HTTP} function executed at: {DateTime.Now}");
             DateTime dateToQuery = DateTime.Now;
 
             if (EnvVariables.SearchByVaccine() == null) {
-                log.LogInformation($"Finding slots in district {SlotFinderByDistrictId.DistrictId} for {dateToQuery:d}");
-                var result =  await SlotFinderByDistrictId.GetAvailableSlotsForDateAsync(dateToQuery);
+                logger.LogInformation($"Finding slots in district {slotFinderByDistrictId.DistrictId} for {dateToQuery:d}");
+                var result =  await slotFinderByDistrictId.GetAvailableSlotsForDateAsync(dateToQuery);
 
                 if  ( result.Any()) {
-                    LogResults(result, log, SlotFinderByDistrictId.DistrictId);
+                    LogResults(result, logger, slotFinderByDistrictId.DistrictId);
                 }
                 else {
-                    LogNone(log, SlotFinderByDistrictId.DistrictId);
+                    LogNone(logger, slotFinderByDistrictId.DistrictId);
                 }
                 return;
             }
 
             VaccineType vaccineToSearch = EnvVariables.SearchByVaccine();
-            log.LogInformation($"Finding slots for {vaccineToSearch} in district {SlotFinderByDistrictId.DistrictId} for {dateToQuery:d}");
-            var resultForVaccine = await SlotFinderByDistrictId.GetAvailableSlotsForDateAndVaccineAsync(dateToQuery, vaccineToSearch);
+            logger.LogInformation($"Finding slots for {vaccineToSearch} in district {slotFinderByDistrictId.DistrictId} for {dateToQuery:d}");
+            var resultForVaccine = await slotFinderByDistrictId.GetAvailableSlotsForDateAndVaccineAsync(dateToQuery, vaccineToSearch);
 
             if (resultForVaccine.Any()) {
-                LogResults(resultForVaccine, log, SlotFinderByDistrictId.DistrictId, vaccineToSearch);
+                LogResults(resultForVaccine, logger, slotFinderByDistrictId.DistrictId, vaccineToSearch);
             }
             else {
-                LogNone(log, SlotFinderByDistrictId.DistrictId, vaccineToSearch);
+                LogNone(logger, slotFinderByDistrictId.DistrictId, vaccineToSearch);
             }
         }
 

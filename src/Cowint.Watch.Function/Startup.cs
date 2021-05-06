@@ -14,8 +14,7 @@ namespace Cowin.Watch.Function
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
-            builder.Services.AddHttpClient<CowinApiHttpClient>(client => 
-            {
+            builder.Services.AddHttpClient<CowinApiHttpClient>(client => {
                 client.BaseAddress = EnvVariables.CowinBaseUrl();
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept
@@ -25,6 +24,10 @@ namespace Cowin.Watch.Function
                 client.DefaultRequestHeaders.AcceptLanguage
                 .Add(new StringWithQualityHeaderValue("en-US", 0.9));
             });
+
+            builder.Services.AddSingleton<SlotFinderByDistrictId>(provider =>
+            new SlotFinderByDistrictId(provider.GetService<CowinApiHttpClient>(), EnvVariables.DistrictId()));
+            
         }
     }
 }

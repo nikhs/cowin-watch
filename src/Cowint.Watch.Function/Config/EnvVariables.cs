@@ -9,6 +9,7 @@ namespace Cowin.Watch.Function.Config
     {
         public static readonly string KEY_SearchByVaccine = "SearchByVaccine";
         public static readonly string KEY_CowinBaseUrl = "CowinBaseUrl";
+        public static readonly string KEY_DistrictId = "DistrictId";
 
         public static VaccineType SearchByVaccine()
         {
@@ -25,5 +26,10 @@ namespace Cowin.Watch.Function.Config
             return new Uri(envValue);
         }
 
+        internal static DistrictId DistrictId()
+        {
+            var envValue = Environment.GetEnvironmentVariable(KEY_DistrictId);
+            return Core.DistrictId.FromInt(int.Parse(envValue));
+        }
     }
 }

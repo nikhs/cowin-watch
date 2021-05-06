@@ -22,12 +22,18 @@ namespace Cowin.Watch.Core.Tests
             CowinApiHttpClient cowinApiClient = GetCowinApiClient(content);
             var slotFinderByDistrictId = new SlotFinderByDistrictId(cowinApiClient, districtId);
 
-            await Cowin.Watch.Function.Watch.Run(null, logger, slotFinderByDistrictId);
+            await RunFn(logger, slotFinderByDistrictId);
             var logs = (logger as ListLogger).Logs;
 
             Assert.IsNotNull(logger);
             Assert.IsTrue(logs.Count > 0);
             Assert.IsTrue(logs[1].Contains("Finding"));
+        }
+
+        private static async Task RunFn(ILogger logger, SlotFinderByDistrictId slotFinderByDistrictId)
+        {
+            var func = new Cowin.Watch.Function.Watch(slotFinderByDistrictId);
+            await func.Run(null, logger);
         }
 
         private static CowinApiHttpClient GetCowinApiClient(string content)
@@ -49,7 +55,7 @@ namespace Cowin.Watch.Core.Tests
             CowinApiHttpClient cowinApiClient = GetCowinApiClient(content);
             var slotFinderByDistrictId = new SlotFinderByDistrictId(cowinApiClient, districtId);
 
-            await Cowin.Watch.Function.Watch.Run(null, logger, slotFinderByDistrictId);
+            await RunFn(logger, slotFinderByDistrictId);
             var logs = (logger as ListLogger).Logs;
 
             var expectedLog = GetExpectedSuccessLog(hospital, vaccine, sessionDate, districtId);
@@ -69,7 +75,7 @@ namespace Cowin.Watch.Core.Tests
             CowinApiHttpClient cowinApiClient = GetCowinApiClient(content);
             var slotFinderByDistrictId = new SlotFinderByDistrictId(cowinApiClient, districtId);
 
-            await Cowin.Watch.Function.Watch.Run(null, logger, slotFinderByDistrictId);
+            await RunFn(logger, slotFinderByDistrictId);
             var logs = (logger as ListLogger).Logs;
 
             var expectedLog = GetExpectedFailLog(hospital, districtId);
@@ -94,7 +100,7 @@ namespace Cowin.Watch.Core.Tests
             var slotFinderByDistrictId = new SlotFinderByDistrictId(cowinApiClient, districtId);
 
             Environment.SetEnvironmentVariable(EnvVariables.KEY_SearchByVaccine, expectedVaccine.ToString());
-            await Cowin.Watch.Function.Watch.Run(null, logger, slotFinderByDistrictId);
+            await RunFn(logger, slotFinderByDistrictId);
             var logs = (logger as ListLogger).Logs;
 
             var expectedLog = GetExpectedSuccessLog(hospital, expectedVaccine, sessionDate, districtId);
@@ -117,7 +123,7 @@ namespace Cowin.Watch.Core.Tests
             var slotFinderByDistrictId = new SlotFinderByDistrictId(cowinApiClient, districtId);
 
             Environment.SetEnvironmentVariable(EnvVariables.KEY_SearchByVaccine, expectedVaccine.ToString());
-            await Cowin.Watch.Function.Watch.Run(null, logger, slotFinderByDistrictId);
+            await RunFn(logger, slotFinderByDistrictId);
             var logs = (logger as ListLogger).Logs;
 
             var expectedLog = GetExpectedFailLog(hospital, expectedVaccine, districtId);
