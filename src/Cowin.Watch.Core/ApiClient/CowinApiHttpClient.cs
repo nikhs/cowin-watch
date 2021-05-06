@@ -17,7 +17,7 @@ namespace Cowin.Watch.Core
             this.httpClient = httpClient;
         }
 
-        public async Task<Root> GetSessionsForDistrictAndDateAsync(int districtId, DateTimeOffset dateFrom, CancellationToken cancellationToken)
+        public async Task<Root> GetSessionsForDistrictAndDateAsync(DistrictId districtId, DateTimeOffset dateFrom, CancellationToken cancellationToken)
         {
             string requestUri = $"appointment/sessions/public/calendarByDistrict?district_id={districtId}&date={dateFrom:d}";
             using (HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, requestUri)) {

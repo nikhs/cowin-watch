@@ -15,7 +15,7 @@ namespace Cowin.Watch.Core.Tests
         public async Task When_Request_Is_Valid_Endpoint_Returns_200()
         {
             var client = LiveClientFactory.GetClient();
-            var districtId = 19; var dateFrom = DateTimeOffset.Now;
+            var districtId = DistrictId.FromInt(19); var dateFrom = DateTimeOffset.Now;
 
             var response = await client.GetSessionsForDistrictAndDateAsync(districtId, dateFrom, CancellationToken.None);
             Assert.IsNotNull(response);

@@ -134,17 +134,17 @@ namespace Cowin.Watch.Core.Tests
 
         private string GetExpectedFailLog(string hospital, VaccineType vaccine, DistrictId districtId)
         {
-            return $"No slots for {vaccine} for districtId={districtId.Value}";
+            return $"No slots for {vaccine} for districtId={districtId}";
         }
 
         private string GetExpectedFailLog(string hospital, DistrictId districtId)
         {
-            return $"No slots for districtId={districtId.Value}";
+            return $"No slots for districtId={districtId}";
         }
 
         private static string GetExpectedSuccessLog(string hospital, VaccineType vaccine, DateTimeOffset sessionDate, DistrictId districtId)
         {
-            return $"Found slots for {vaccine} for districtId={districtId.Value} at {hospital} on {sessionDate:d}";
+            return $"Found slots for {vaccine} for districtId={districtId} at {hospital} on {sessionDate:d}";
         }
 
         private ILogger GetLogger() => new ListLogger();

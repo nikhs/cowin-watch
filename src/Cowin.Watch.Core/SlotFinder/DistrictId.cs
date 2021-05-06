@@ -6,8 +6,6 @@ namespace Cowin.Watch.Core
     {
         private readonly int districtId;
 
-        public int Value => districtId;
-
         protected DistrictId(int districtId)
         {
             this.districtId = districtId;
@@ -24,6 +22,11 @@ namespace Cowin.Watch.Core
         {
             ValidateDistrictId(districtId);
             return new DistrictId(districtId);
+        }
+
+        public override string ToString()
+        {
+            return districtId.ToString();
         }
     }
 }
