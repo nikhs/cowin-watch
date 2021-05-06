@@ -67,15 +67,20 @@ namespace Cowin.Watch.Core.Tests.Lib
 
         public static string GenerateResponseForVaccineWithoutSlots(VaccineType vaccineType)
         {
-            return GenerateResponseWithoutSessions("District General Hostpital", vaccineType);
+            return GenerateResponseWithoutSessions("District General Hostpital");
         }
 
-        public static string GenerateResponseForHospitalAndVaccineWithoutSlots(string hospitalName, VaccineType vaccineType)
+        public static string GenerateResponseForHospitalAndVaccineWithoutSlots(string hospitalName)
         {
-            return GenerateResponseWithoutSessions(hospitalName, vaccineType);
+            return GenerateResponseWithoutSessions(hospitalName);
         }
 
-        private static string GenerateResponseWithoutSessions(string hospitalName, VaccineType vaccineType)
+        public static string GenerateResponseForHospitalWithoutSlots(string hospital)
+        {
+            return GenerateResponseWithoutSessions(hospital);
+        }
+
+        private static string GenerateResponseWithoutSessions(string hospitalName)
         {
             string rawJson = @"
 {
@@ -96,12 +101,6 @@ namespace Cowin.Watch.Core.Tests.Lib
       ""from"": ""09:00:00"",
       ""to"": ""18:00:00"",
       ""fee_type"": ""Free"",
-      ""vaccine_fees"": [
-        {
-          ""vaccine"": ""##_Vaccine_##"",
-          ""fee"": ""250""
-        }
-      ],
       ""sessions"": [
       ]
     }
@@ -109,8 +108,7 @@ namespace Cowin.Watch.Core.Tests.Lib
 }
 ";
             return rawJson
-                .Replace("##_HOSPITAL_##", hospitalName)
-                .Replace("##_Vaccine_##", vaccineType.ToString());
+                .Replace("##_HOSPITAL_##", hospitalName);
         }
 
         public static string GetCentersApiResponseJson()

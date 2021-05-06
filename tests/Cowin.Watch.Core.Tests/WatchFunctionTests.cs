@@ -62,18 +62,17 @@ namespace Cowin.Watch.Core.Tests
         public async Task When_WatchFunction_Starts_If_Api_Has_No_Slots_Result_Is_Logged()
         {
             var hospital = "Hosp";
-            var vaccine = VaccineType.Covaxin();
             var districtId = DistrictId.FromInt(56);
 
             var logger = GetLogger();
-            string content = SampleJsonFactory.GenerateResponseForHospitalAndVaccineWithoutSlots(hospital, vaccine);
+            string content = SampleJsonFactory.GenerateResponseForHospitalWithoutSlots(hospital);
             CowinApiHttpClient cowinApiClient = GetCowinApiClient(content);
             var slotFinderByDistrictId = new SlotFinderByDistrictId(cowinApiClient, districtId);
 
             await Cowin.Watch.Function.Watch.Run(null, logger, slotFinderByDistrictId);
             var logs = (logger as ListLogger).Logs;
 
-            var expectedLog = GetExpectedFailLog(hospital, vaccine, districtId);
+            var expectedLog = GetExpectedFailLog(hospital, districtId);
 
             Assert.IsTrue(logs.Any(line =>
                 line.Contains(expectedLog)));
@@ -113,7 +112,7 @@ namespace Cowin.Watch.Core.Tests
             var districtId = DistrictId.FromInt(56);
 
             var logger = GetLogger();
-            string content = SampleJsonFactory.GenerateResponseForHospitalAndVaccineWithoutSlots(hospital, expectedVaccine);
+            string content = SampleJsonFactory.GenerateResponseForHospitalAndVaccineWithoutSlots(hospital);
             CowinApiHttpClient cowinApiClient = GetCowinApiClient(content);
             var slotFinderByDistrictId = new SlotFinderByDistrictId(cowinApiClient, districtId);
 
@@ -129,12 +128,17 @@ namespace Cowin.Watch.Core.Tests
 
         private string GetExpectedFailLog(string hospital, VaccineType vaccine, DistrictId districtId)
         {
-            return $"No slots for {vaccine} for districtId={districtId}";
+            return $"No slots for {vaccine} for districtId={districtId.Value}";
+        }
+
+        private string GetExpectedFailLog(string hospital, DistrictId districtId)
+        {
+            return $"No slots for districtId={districtId.Value}";
         }
 
         private static string GetExpectedSuccessLog(string hospital, VaccineType vaccine, DateTimeOffset sessionDate, DistrictId districtId)
         {
-            return $"Found slots for {vaccine} for districtId={districtId} at {hospital} on {sessionDate:d}";
+            return $"Found slots for {vaccine} for districtId={districtId.Value} at {hospital} on {sessionDate:d}";
         }
 
         private ILogger GetLogger() => new ListLogger();

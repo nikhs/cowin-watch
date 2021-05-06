@@ -10,18 +10,18 @@ namespace Cowin.Watch.Core
     public class SlotFinderByDistrictId
     {
         private readonly CowinApiHttpClient cowinApiHttpClient;
-        private readonly DistrictId districtId;
+        public readonly DistrictId DistrictId;
 
         public SlotFinderByDistrictId(CowinApiHttpClient cowinApiHttpClient, DistrictId districtId)
         {
             this.cowinApiHttpClient = cowinApiHttpClient ?? throw new ArgumentNullException(nameof(cowinApiHttpClient));
-            this.districtId = districtId ?? throw new ArgumentNullException(nameof(districtId));
+            this.DistrictId = districtId ?? throw new ArgumentNullException(nameof(districtId));
         }
 
         public async Task<IEnumerable<Center>> GetAvailableSlotsForDateAsync(DateTimeOffset from)
         {
             var result = await cowinApiHttpClient
-                .GetSessionsForDistrictAndDateAsync(districtId.Value, from, CancellationToken.None);
+                .GetSessionsForDistrictAndDateAsync(DistrictId.Value, from, CancellationToken.None);
 
             if (result == null || result.Centers == null || result.Centers.Count == 0) {
                 return Enumerable.Empty<Center>();
@@ -39,7 +39,7 @@ namespace Cowin.Watch.Core
         public async Task<IEnumerable<Center>> GetAvailableSlotsForDateAndVaccineAsync(DateTimeOffset from, VaccineType expectedVaccine)
         {
             var result = await cowinApiHttpClient
-                .GetSessionsForDistrictAndDateAsync(districtId.Value, from, CancellationToken.None);
+                .GetSessionsForDistrictAndDateAsync(DistrictId.Value, from, CancellationToken.None);
             expectedVaccine.Equals(string.Empty);
 
             if (result == null || result.Centers == null || result.Centers.Count == 0) {
