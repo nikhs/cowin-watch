@@ -2,8 +2,6 @@
 using Cowin.Watch.Function.Config;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Http;
-using System;
 using System.Net.Http.Headers;
 
 [assembly: FunctionsStartup(typeof(Cowin.Watch.Function.Startup))]
@@ -27,7 +25,7 @@ namespace Cowin.Watch.Function
 
             builder.Services.AddSingleton<SlotFinderByDistrictId>(provider =>
             new SlotFinderByDistrictId(provider.GetService<CowinApiHttpClient>(), EnvVariables.DistrictId()));
-            
+
         }
     }
 }

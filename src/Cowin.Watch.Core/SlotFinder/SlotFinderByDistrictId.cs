@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -46,13 +45,13 @@ namespace Cowin.Watch.Core
                 return Enumerable.Empty<Center>();
             }
 
-            if (result.Centers.All(c => c.Sessions == null || c.Sessions.Count ==0)) {
+            if (result.Centers.All(c => c.Sessions == null || c.Sessions.Count == 0)) {
                 return Enumerable.Empty<Center>();
             }
 
             return result.Centers
                 .Where(center => center.Sessions
-                .Any(session => expectedVaccine.Equals(session.Vaccine) && session.Slots.Count > 0 ));
+                .Any(session => expectedVaccine.Equals(session.Vaccine) && session.Slots.Count > 0));
         }
     }
 }

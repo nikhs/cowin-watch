@@ -3,9 +3,7 @@ using Cowin.Watch.Function.Config;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Cowin.Watch.Core.Tests
@@ -111,6 +109,29 @@ namespace Cowin.Watch.Core.Tests
 
         [TestMethod]
         public async Task When_WatchFunction_Starts_If_Api_Has_No_Slots_For_Vaccine_Result_Is_Logged()
+        {
+            var expectedVaccine = VaccineType.Covaxin();
+
+            var hospital = "Hosp";
+            var districtId = DistrictId.FromInt(56);
+
+            var logger = GetLogger();
+            string content = SampleJsonFactory.GenerateResponseForHospitalAndVaccineWithoutSlots(hospital);
+            CowinApiHttpClient cowinApiClient = GetCowinApiClient(content);
+            var slotFinderByDistrictId = new SlotFinderByDistrictId(cowinApiClient, districtId);
+
+            Environment.SetEnvironmentVariable(EnvVariables.KEY_SearchByVaccine, expectedVaccine.ToString());
+            await RunFn(logger, slotFinderByDistrictId);
+            var logs = (logger as ListLogger).Logs;
+
+            var expectedLog = GetExpectedFailLog(hospital, expectedVaccine, districtId);
+
+            Assert.IsTrue(logs.Any(line =>
+                line.Contains(expectedLog)));
+        }
+
+        [TestMethod]
+        public async Task When_WatchFunction_Starts_If_Api_Has_Slots_For_Vaccine_In4Weeks_Result_Is_Logged()
         {
             var expectedVaccine = VaccineType.Covaxin();
 

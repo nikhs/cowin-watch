@@ -13,7 +13,7 @@ namespace Cowin.Watch.Core
 
         private static void ValidateDistrictId(int districtId)
         {
-            if(districtId < 1) {
+            if (districtId < 1) {
                 throw new ArgumentException($"{nameof(districtId)} should be above 0");
             }
         }

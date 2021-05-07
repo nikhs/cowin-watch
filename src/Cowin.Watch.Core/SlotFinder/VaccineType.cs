@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Cowin.Watch.Core
 {
-    public class VaccineType: IEquatable<string>
+    public class VaccineType : IEquatable<string>
     {
         private const string VACCINE_STR_COVIDSHIELD = "covishield";
         private const string VACCINE_STR_COVAXIN = "covaxin";

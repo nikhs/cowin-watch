@@ -1,12 +1,11 @@
+using Cowin.Watch.Core;
+using Cowin.Watch.Function.Config;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Cowin.Watch.Core;
-using Cowin.Watch.Function.Config;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
-using Microsoft.Extensions.Logging;
 
 namespace Cowin.Watch.Function
 {
@@ -30,9 +29,9 @@ namespace Cowin.Watch.Function
 
             if (EnvVariables.SearchByVaccine() == null) {
                 logger.LogInformation($"Finding slots in district {slotFinderByDistrictId.districtId} for {dateToQuery:d}");
-                var result =  await slotFinderByDistrictId.GetAvailableSlotsForDateAsync(dateToQuery);
+                var result = await slotFinderByDistrictId.GetAvailableSlotsForDateAsync(dateToQuery);
 
-                if  ( result.Any()) {
+                if (result.Any()) {
                     LogResults(result, logger, slotFinderByDistrictId.districtId);
                 }
                 else {
@@ -74,8 +73,8 @@ namespace Cowin.Watch.Function
 
         private static void LogResults(IEnumerable<Center> centers, ILogger logger, DistrictId districtId)
         {
-            foreach(var center in centers) {
-                foreach(var session in center.Sessions) {
+            foreach (var center in centers) {
+                foreach (var session in center.Sessions) {
                     logger.LogInformation($"Found slots for {session.Vaccine} for districtId={districtId} at {center.Name} on {session.Date:d}");
                 }
             }

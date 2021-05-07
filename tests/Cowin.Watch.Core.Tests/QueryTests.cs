@@ -23,7 +23,7 @@ namespace Cowin.Watch.Core.Tests
         [TestMethod]
         public async Task Does_Client_Parse_Valid_Content()
         {
-            var districtId = DistrictId.FromInt(15); 
+            var districtId = DistrictId.FromInt(15);
             var dateFrom = DateTimeOffset.Parse("04-May-2021");
             string content = SampleJsonFactory.GetCentersApiResponseJson();
             var cowinApiClient = ClientFactory.GetHandlerFor_200(content);
