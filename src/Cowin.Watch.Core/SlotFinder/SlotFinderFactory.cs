@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cowin.Watch.Core.SlotFinder;
+using System;
 
 namespace Cowin.Watch.Core
 {
@@ -6,7 +7,11 @@ namespace Cowin.Watch.Core
     {
         public static ISlotFinder For(CowinApiHttpClient cowinApiClient, IFinderConstraint finderConstraint)
         {
-            throw new NotImplementedException();
+            return finderConstraint switch {
+                SearchByDistrictConstraint searchByDistrictConstraint => new SlotFinderByDistrictId(cowinApiClient, searchByDistrictConstraint.DistrictId),
+                SearchByPincodeConstraint searchByPincodeConstraint => new SlotFinderByPincode(cowinApiClient, searchByPincodeConstraint.Pincode),
+                _ => throw new InvalidConstraintException(nameof(IFinderConstraint))
+            };
         }
     }
 }

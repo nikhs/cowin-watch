@@ -1,6 +1,15 @@
-﻿namespace Cowin.Watch.Core.SlotFinder
+﻿using System;
+
+namespace Cowin.Watch.Core.SlotFinder
 {
-    class InvalidDistrictIdException
+    [Serializable]
+    public class InvalidConstraintException : Exception
     {
+        private readonly string constraintType;
+
+        public InvalidConstraintException(string constraintType)
+        {
+            this.constraintType = constraintType;
+        }
     }
 }

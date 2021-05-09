@@ -25,7 +25,7 @@ namespace Cowin.Watch.Core
         }
     }
 
-    public class SlotFinderByPincode : ISlotFinder
+    internal class SlotFinderByPincode : ISlotFinder
     {
         private readonly CowinApiHttpClient cowinApiHttpClient;
         public readonly Pincode pincode;
