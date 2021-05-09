@@ -36,5 +36,7 @@ namespace Cowin.Watch.Core.Tests.Lib
             string message = formatter(state, exception);
             this.Logs.Add(message);
         }
+
+        public static ILogger GetInstance() => new ListLogger();
     }
 }
