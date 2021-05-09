@@ -16,7 +16,7 @@ namespace Cowin.Watch.Core.Tests
         {
             var districtId = DistrictId.FromInt(56);
             var logger = GetLogger();
-            string content = SampleJsonFactory.GetCentersApiResponseJson();
+            string content = SampleJsonFactory.GetDefaultCentersApiResponseJson();
             CowinApiHttpClient cowinApiClient = GetCowinApiClient(content);
             var slotFinderByDistrictId = new SlotFinderByDistrictId(cowinApiClient, districtId);
 

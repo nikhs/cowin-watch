@@ -37,7 +37,7 @@ namespace Cowin.Watch.Core.Tests
 
         private Function.Watch GetWatchFn(ILogger logger, IFunctionConfig fnConfig)
         {
-            var response = SampleJsonFactory.GetCentersApiResponseJson();
+            var response = SampleJsonFactory.GetDefaultCentersApiResponseJson();
             CowinApiHttpClient cowinApiClient = ClientFactory.GetHandlerFor_200<string>(response) as CowinApiHttpClient;
             return new Function.Watch(logger, cowinApiClient, fnConfig);
         }

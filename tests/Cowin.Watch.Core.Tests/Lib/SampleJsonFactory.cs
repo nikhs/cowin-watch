@@ -111,7 +111,7 @@ namespace Cowin.Watch.Core.Tests.Lib
                 .Replace("##_HOSPITAL_##", hospitalName);
         }
 
-        public static string GetCentersApiResponseJson()
+        public static string GetDefaultCentersApiResponseJson()
         {
             return @"
 {

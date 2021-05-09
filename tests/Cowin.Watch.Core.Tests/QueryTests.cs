@@ -25,7 +25,7 @@ namespace Cowin.Watch.Core.Tests
         {
             var districtId = DistrictId.FromInt(15);
             var dateFrom = DateTimeOffset.Parse("04-May-2021");
-            string content = SampleJsonFactory.GetCentersApiResponseJson();
+            string content = SampleJsonFactory.GetDefaultCentersApiResponseJson();
             var cowinApiClient = ClientFactory.GetHandlerFor_200(content);
 
             Root actualResponse = await cowinApiClient.GetSessionsForDistrictAndDateAsync(districtId, dateFrom, CancellationToken.None);

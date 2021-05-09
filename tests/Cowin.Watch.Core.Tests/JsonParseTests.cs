@@ -11,7 +11,7 @@ namespace Cowin.Watch.Core.Tests
         [TestMethod]
         public void Centers_Are_Identified()
         {
-            var src = SampleJsonFactory.GetCentersApiResponseJson();
+            var src = SampleJsonFactory.GetDefaultCentersApiResponseJson();
             var root = JsonParser.DeserializeJson(src);
 
             Assert.IsNotNull(root.Centers);
@@ -20,7 +20,7 @@ namespace Cowin.Watch.Core.Tests
         [TestMethod]
         public void Number_Of_Centers_Found_Is_Correct()
         {
-            var src = SampleJsonFactory.GetCentersApiResponseJson();
+            var src = SampleJsonFactory.GetDefaultCentersApiResponseJson();
             var root = JsonParser.DeserializeJson(src);
 
             var expectedCentersCount = 1;
@@ -30,7 +30,7 @@ namespace Cowin.Watch.Core.Tests
         [TestMethod]
         public void Center_District_Is_Correct()
         {
-            var src = SampleJsonFactory.GetCentersApiResponseJson();
+            var src = SampleJsonFactory.GetDefaultCentersApiResponseJson();
             var root = JsonParser.DeserializeJson(src);
 
             var expectedDistrictName = "Satara";
@@ -41,7 +41,7 @@ namespace Cowin.Watch.Core.Tests
         [TestMethod]
         public void Center_Sessions_Are_Identified()
         {
-            var src = SampleJsonFactory.GetCentersApiResponseJson();
+            var src = SampleJsonFactory.GetDefaultCentersApiResponseJson();
             var root = JsonParser.DeserializeJson(src);
 
             Center center = root.Centers.First();
@@ -51,7 +51,7 @@ namespace Cowin.Watch.Core.Tests
         [TestMethod]
         public void Number_Of_Center_Sessions_Found_Is_Correct()
         {
-            var src = SampleJsonFactory.GetCentersApiResponseJson();
+            var src = SampleJsonFactory.GetDefaultCentersApiResponseJson();
             var root = JsonParser.DeserializeJson(src);
 
             var expectedSessionCount = 1;
@@ -62,7 +62,7 @@ namespace Cowin.Watch.Core.Tests
         [TestMethod]
         public void Ensure_Vaccine_Name_Is_Expected()
         {
-            var src = SampleJsonFactory.GetCentersApiResponseJson();
+            var src = SampleJsonFactory.GetDefaultCentersApiResponseJson();
             var root = JsonParser.DeserializeJson(src);
 
             var expectedVaccineNames = new string[] { "COVISHIELD", "COVAXIN" };
@@ -77,7 +77,7 @@ namespace Cowin.Watch.Core.Tests
         [TestMethod]
         public void Center_Sessions_Slots_Is_Not_Empty()
         {
-            var src = SampleJsonFactory.GetCentersApiResponseJson();
+            var src = SampleJsonFactory.GetDefaultCentersApiResponseJson();
             var root = JsonParser.DeserializeJson(src);
 
             var slots = root.Centers.First().Sessions.First().Slots;

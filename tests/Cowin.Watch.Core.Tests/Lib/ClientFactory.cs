@@ -16,6 +16,10 @@ namespace Cowin.Watch.Core.Tests.Lib
         public static ICowinApiClient GetHandlerFor_200<TContent>(TContent content) =>
             new CowinApiHttpClient(GetDefaultHttpClient(OkResponseHandler<TContent>.ForContent<TContent>(content)));
 
+        public static ICowinApiClient GetDefaultHandlerFor_200() =>
+    new CowinApiHttpClient(GetDefaultHttpClient(OkResponseHandler<string>.ForContent<string>(SampleJsonFactory.GetDefaultCentersApiResponseJson())));
+
+
         public static ICowinApiClient GetHandlerFor_DelayedResponse() =>
             new CowinApiHttpClient(GetDefaultHttpClient(DelayedResponseHandler.Instance));
 
