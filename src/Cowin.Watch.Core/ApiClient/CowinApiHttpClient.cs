@@ -40,5 +40,10 @@ namespace Cowin.Watch.Core
             }
 
         }
+
+        internal Task<Root> GetSessionsForPincodeAndDateAsync(Pincode pincode, DateTimeOffset dateFrom, CancellationToken none)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
