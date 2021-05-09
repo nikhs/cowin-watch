@@ -37,7 +37,7 @@ namespace Cowin.Watch.Core
 
             return result.Centers
                 .Where(center => center.Sessions
-                .Any(session => session.Slots.Count > 0));
+                .Any(session => session?.Slots?.Count > 0));
         };
 
         protected abstract Func<Center, bool> AdditionalCenterFilter { get; }
@@ -64,7 +64,7 @@ namespace Cowin.Watch.Core
 
         protected override Func<Center, bool> AdditionalCenterFilter => delegate (Center center) {
             return center.Sessions
-            .Any(session => vaccineType.Equals(session.Vaccine) && session.Slots.Count > 0);
+            .Any(session => vaccineType.Equals(session?.Vaccine ?? String.Empty) && session?.Slots?.Count > 0);
         };
     }
 }

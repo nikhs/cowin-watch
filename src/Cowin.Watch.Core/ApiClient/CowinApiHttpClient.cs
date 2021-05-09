@@ -1,4 +1,5 @@
 ﻿using Cowin.Watch.Core.ApiClient;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
 using System.Net.Http;
@@ -11,10 +12,12 @@ namespace Cowin.Watch.Core
     public class CowinApiHttpClient : ICowinApiClient
     {
         private HttpClient httpClient;
+        private readonly ILogger logger;
 
-        public CowinApiHttpClient(HttpClient httpClient)
+        public CowinApiHttpClient(HttpClient httpClient, ILogger logger)
         {
             this.httpClient = httpClient;
+            this.logger = logger;
         }
 
         public async Task<Root> GetSessionsForDistrictAndDateAsync(DistrictId districtId, DateTimeOffset dateFrom, CancellationToken cancellationToken)
@@ -31,8 +34,13 @@ namespace Cowin.Watch.Core
 
         private async Task<Root> GetSessions(string requestUri, CancellationToken cancellationToken)
         {
+            using (logger.BeginScope("{nameof(ICowinApiClient)}:", nameof(CowinApiHttpClient)))
+            logger.LogDebug("Querying {requestUri}", requestUri);
+
             using HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, requestUri);
             var response = await httpClient.SendAsync(hrm, cancellationToken);
+
+            logger.LogDebug("Query result:{statusCode}", response.StatusCode);
 
             if (RequestHasJsonResponse(response)) {
                 string responseContent = await response.Content.ReadAsStringAsync();
@@ -53,7 +61,7 @@ namespace Cowin.Watch.Core
 
         private static bool RequestHasJsonResponse(HttpResponseMessage response)
         {
-            return response.IsSuccessStatusCode && response.Content.Headers.ContentType.MediaType != "application/json";
+            return response.IsSuccessStatusCode && response.Content.Headers.ContentType.MediaType == "application/json";
         }
     }
 }
