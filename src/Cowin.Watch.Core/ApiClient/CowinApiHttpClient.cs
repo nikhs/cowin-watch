@@ -20,30 +20,40 @@ namespace Cowin.Watch.Core
         public async Task<Root> GetSessionsForDistrictAndDateAsync(DistrictId districtId, DateTimeOffset dateFrom, CancellationToken cancellationToken)
         {
             string requestUri = $"appointment/sessions/public/calendarByDistrict?district_id={districtId}&date={dateFrom:d}";
-            using (HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, requestUri)) {
-                var response = await httpClient.SendAsync(hrm, cancellationToken);
-
-                if (!response.IsSuccessStatusCode) {
-                    if (response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden) {
-                        throw new UnauthorizedAPIAccessException();
-                    }
-                    else if (response.StatusCode == HttpStatusCode.NotFound) {
-                        throw new NotFoundAPIException();
-                    }
-                }
-
-                string responseContent = await response.Content.ReadAsStringAsync();
-                if (response.Content.Headers.ContentType.MediaType != "application/json") {
-                    throw new UnexpectedResponseException();
-                }
-                return JsonSerializer.Deserialize<Root>(responseContent);
-            }
-
+            return await GetSessions(requestUri, cancellationToken);
         }
 
-        internal Task<Root> GetSessionsForPincodeAndDateAsync(Pincode pincode, DateTimeOffset dateFrom, CancellationToken none)
+        public async Task<Root> GetSessionsForPincodeAndDateAsync(Pincode pincode, DateTimeOffset dateFrom, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            string requestUri = $"appointment/sessions/public/calendarByPin?pincode={pincode}&date={dateFrom:d}";
+            return await GetSessions(requestUri, cancellationToken);
+        }
+
+        private async Task<Root> GetSessions(string requestUri, CancellationToken cancellationToken)
+        {
+            using HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, requestUri);
+            var response = await httpClient.SendAsync(hrm, cancellationToken);
+
+            if (RequestHasJsonResponse(response)) {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                var parsed = JsonSerializer.Deserialize<Root>(responseContent);
+                return parsed ?? throw new UnexpectedResponseException();
+            }
+
+            switch (response.StatusCode) {
+                case HttpStatusCode.Unauthorized:
+                case HttpStatusCode.Forbidden:
+                    throw new UnauthorizedAPIAccessException();
+                case HttpStatusCode.NotFound:
+                    throw new NotFoundAPIException();
+                default:
+                    throw new UnexpectedResponseException();
+            }
+        }
+
+        private static bool RequestHasJsonResponse(HttpResponseMessage response)
+        {
+            return response.IsSuccessStatusCode && response.Content.Headers.ContentType.MediaType != "application/json";
         }
     }
 }
