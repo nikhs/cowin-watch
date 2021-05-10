@@ -11,7 +11,7 @@ namespace Cowin.Watch.Core
         private readonly CowinApiHttpClient cowinApiHttpClient;
         public readonly DistrictId districtId;
 
-        public SlotFinderByDistrictId(CowinApiHttpClient cowinApiHttpClient, DistrictId districtId)
+        private SlotFinderByDistrictId(CowinApiHttpClient cowinApiHttpClient, DistrictId districtId)
         {
             this.cowinApiHttpClient = cowinApiHttpClient ?? throw new ArgumentNullException(nameof(cowinApiHttpClient));
             this.districtId = districtId ?? throw new ArgumentNullException(nameof(districtId));
@@ -23,6 +23,9 @@ namespace Cowin.Watch.Core
                 .GetSessionsForDistrictAndDateAsync(districtId, finderFilter.DateFrom, CancellationToken.None);
             return finderFilter.Filter(result);
         }
+
+        public static SlotFinderByDistrictId From(CowinApiHttpClient cowinApiHttpClient, SearchByDistrictConstraint searchByDistrictConstraint) =>
+            new SlotFinderByDistrictId(cowinApiHttpClient, searchByDistrictConstraint.DistrictId);
     }
 
     internal class SlotFinderByPincode : ISlotFinder
@@ -30,12 +33,11 @@ namespace Cowin.Watch.Core
         private readonly CowinApiHttpClient cowinApiHttpClient;
         public readonly Pincode pincode;
 
-        public SlotFinderByPincode(CowinApiHttpClient cowinApiHttpClient, Pincode pincode)
+        private SlotFinderByPincode(CowinApiHttpClient cowinApiHttpClient, Pincode pincode)
         {
             this.cowinApiHttpClient = cowinApiHttpClient ?? throw new ArgumentNullException(nameof(cowinApiHttpClient));
             this.pincode = pincode ?? throw new ArgumentNullException(nameof(pincode));
         }
-
         
         public async Task<IEnumerable<Center>> FindBy(IFinderFilter finderFilter, CancellationToken none)
         {
@@ -43,5 +45,8 @@ namespace Cowin.Watch.Core
                 .GetSessionsForPincodeAndDateAsync(pincode, finderFilter.DateFrom, CancellationToken.None);
             return finderFilter.Filter(result);
         }
+
+        public static SlotFinderByPincode From(CowinApiHttpClient cowinApiHttpClient, SearchByPincodeConstraint searchByPincodeConstraint) =>
+            new SlotFinderByPincode(cowinApiHttpClient, searchByPincodeConstraint.Pincode);
     }
 }

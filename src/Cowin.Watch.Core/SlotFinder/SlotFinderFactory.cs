@@ -8,9 +8,9 @@ namespace Cowin.Watch.Core
         public static ISlotFinder For(CowinApiHttpClient cowinApiClient, IFinderConstraint finderConstraint)
         {
             return finderConstraint switch {
-                SearchByDistrictConstraint searchByDistrictConstraint => new SlotFinderByDistrictId(cowinApiClient, searchByDistrictConstraint.DistrictId),
-                SearchByPincodeConstraint searchByPincodeConstraint => new SlotFinderByPincode(cowinApiClient, searchByPincodeConstraint.Pincode),
-                _ => throw new InvalidConstraintException(nameof(IFinderConstraint))
+                SearchByDistrictConstraint searchByDistrictConstraint => SlotFinderByDistrictId.From(cowinApiClient, searchByDistrictConstraint),
+                SearchByPincodeConstraint searchByPincodeConstraint => SlotFinderByPincode.From(cowinApiClient, searchByPincodeConstraint),
+                _ => throw new InvalidConstraintException(finderConstraint.GetType().Name)
             };
         }
     }
