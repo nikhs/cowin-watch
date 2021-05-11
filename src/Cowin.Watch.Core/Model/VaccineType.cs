@@ -46,9 +46,10 @@ namespace Cowin.Watch.Core
 
         public bool Equals(string other) => this.vaccineType.Equals(other, StringComparison.OrdinalIgnoreCase);
         public bool Equals(VaccineType other) => other.Equals(this.vaccineType);
+        public override bool Equals(object obj) => Equals((VaccineType)obj);
+        public override int GetHashCode() => this.vaccineType.GetHashCode();
 
         public override string ToString() => vaccineType;
 
-        public override bool Equals(object obj) => Equals((VaccineType)obj);
     }
 }
