@@ -30,12 +30,25 @@ namespace Cowin.Watch.Core.Tests
         {
             var district = 56;
             var dateFrom = DateTimeOffset.Parse("2-May-2021");
-
             var slotFinder = GetSlotFinderForDistrict_DefaultResponse(district);
 
             var actualResult = await slotFinder.FindBy(FinderFilterFactory.From(dateFrom), CancellationToken.None);
+
             Assert.IsNotNull(actualResult);
         }
+
+        [TestMethod]
+        public async Task When_Searching_By_Valid_Pincode_And_Date_Result_Is_ValidAsync()
+        {
+            var pincode = "123456";
+            var dateFrom = DateTimeOffset.Parse("2-May-2021");
+            var slotFinder = GetSlotFinderForPincode_DefaultResponse(pincode);
+
+            var actualResult = await slotFinder.FindBy(FinderFilterFactory.From(dateFrom), CancellationToken.None);
+
+            Assert.IsNotNull(actualResult);
+        }
+
 
         [TestMethod]
         public async Task When_Searching_By_Valid_DistrictId_And_Vaccine_Result_Is_ValidAsync()
@@ -43,8 +56,20 @@ namespace Cowin.Watch.Core.Tests
             var district = 56;
             var dateFrom = DateTimeOffset.Parse("2-May-2021");
             var expectedVaccine = VaccineType.CovidShield();
-
             var slotFinder = GetSlotFinderForDistrict_DefaultResponse(district);
+
+            var actualResult = await slotFinder.FindBy(FinderFilterFactory.From(dateFrom, expectedVaccine), CancellationToken.None);
+
+            Assert.IsNotNull(actualResult);
+        }
+
+        [TestMethod]
+        public async Task When_Searching_By_Valid_Pincode_And_Vaccine_Result_Is_ValidAsync()
+        {
+            var pincode = "123456";
+            var dateFrom = DateTimeOffset.Parse("2-May-2021");
+            var expectedVaccine = VaccineType.CovidShield();
+            var slotFinder = GetSlotFinderForPincode_DefaultResponse(pincode);
 
             var actualResult = await slotFinder.FindBy(FinderFilterFactory.From(dateFrom, expectedVaccine), CancellationToken.None);
 
@@ -66,26 +91,19 @@ namespace Cowin.Watch.Core.Tests
             Assert.IsTrue(ResultHasExpectedVaccine(actualResult, expectedVaccine));
         }
 
-        private bool ResultHasExpectedVaccine(IEnumerable<Center> actualResult, VaccineType expectedVaccine)
+        [TestMethod]
+        public async Task When_Searching_By_Valid_Pincode_And_Vaccine_Result_Contains_Only_Valid_Vaccines()
         {
-            return actualResult
-                .Any(c => c.Sessions
-                .All(s => expectedVaccine.Equals(s.Vaccine)));
-        }
+            var pincode = "123456";
+            var cowinApiClient = ClientFactory.GetDefaultHandlerFor_200() as CowinApiHttpClient;
+            var slotFinder = GetSlotFinderForPincode(cowinApiClient, pincode);
 
-        private ISlotFinder GetSlotFinderForDistrict_DefaultResponse(int districtId)
-        {
-            var responseJson = SampleJsonFactory.GetDefaultCentersApiResponseJson();
-            var cowinApiClient = ClientFactory.GetHandlerFor_200(responseJson) as CowinApiHttpClient;
+            var dateFrom = DateTimeOffset.Parse("2-May-2021");
+            var expectedVaccine = VaccineType.CovidShield();
 
-            DistrictId district = DistrictId.FromInt(districtId);
-            return SlotFinderFactory.For(cowinApiClient, FinderConstraintFactory.From(district));
-        }
+            var actualResult = await slotFinder.FindBy(FinderFilterFactory.From(dateFrom, expectedVaccine), CancellationToken.None);
 
-        private ISlotFinder GetSlotFinderForDistrict(CowinApiHttpClient cowinApiClient, int districtId)
-        {
-            DistrictId district = DistrictId.FromInt(districtId);
-            return SlotFinderFactory.For(cowinApiClient, FinderConstraintFactory.From(district));
+            Assert.IsTrue(ResultHasExpectedVaccine(actualResult, expectedVaccine));
         }
 
         [TestMethod]
@@ -95,5 +113,30 @@ namespace Cowin.Watch.Core.Tests
             var actualString = "COVISHIELD";
             Assert.IsTrue(expectedVaccine.Equals(actualString));
         }
+
+        private bool ResultHasExpectedVaccine(IEnumerable<Center> actualResult, VaccineType expectedVaccine)
+        {
+            return actualResult
+                .Any(c => c.Sessions
+                .All(s => expectedVaccine.Equals(s.Vaccine)));
+        }
+
+        private ISlotFinder GetSlotFinderForDistrict_DefaultResponse(int districtId)
+        {
+            var cowinApiClient = ClientFactory.GetDefaultHandlerFor_200() as CowinApiHttpClient;
+            return GetSlotFinderForDistrict(cowinApiClient, districtId);
+        }
+
+        private ISlotFinder GetSlotFinderForPincode_DefaultResponse(string pincode)
+        {
+            var cowinApiClient = ClientFactory.GetDefaultHandlerFor_200() as CowinApiHttpClient;
+            return GetSlotFinderForPincode(cowinApiClient, pincode);
+        }
+
+        private ISlotFinder GetSlotFinderForDistrict(CowinApiHttpClient cowinApiClient, int districtId) =>
+            SlotFinderFactory.For(cowinApiClient, FinderConstraintFactory.From(DistrictId.FromInt(districtId)));
+
+        private ISlotFinder GetSlotFinderForPincode(CowinApiHttpClient cowinApiClient, string pincode) =>
+            SlotFinderFactory.For(cowinApiClient, FinderConstraintFactory.From(Pincode.FromString(pincode)));
     }
 }

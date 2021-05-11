@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Cowin.Watch.Core
 {
-    public class VaccineType : IEquatable<string>
+    public class VaccineType : IEquatable<string>, IEquatable<VaccineType>
     {
         private const string VACCINE_STR_COVIDSHIELD = "covishield";
         private const string VACCINE_STR_COVAXIN = "covaxin";
@@ -45,6 +45,9 @@ namespace Cowin.Watch.Core
         public bool IsCovaxin() => IsCovaxin(this.vaccineType);
 
         public bool Equals(string other) => this.vaccineType.Equals(other, StringComparison.OrdinalIgnoreCase);
+        public bool Equals(VaccineType other) => other.Equals(this.vaccineType);
+
         public override string ToString() => vaccineType;
+
     }
 }
