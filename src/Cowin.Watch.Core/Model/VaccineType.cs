@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Cowin.Watch.Core
 {
-    public class VaccineType : IEquatable<string>, IEquatable<VaccineType>
+    public sealed class VaccineType : IEquatable<string>, IEquatable<VaccineType>
     {
         private const string VACCINE_STR_COVIDSHIELD = "covishield";
         private const string VACCINE_STR_COVAXIN = "covaxin";
@@ -18,7 +18,7 @@ namespace Cowin.Watch.Core
         private VaccineType(string vaccineType)
         {
             if (string.IsNullOrWhiteSpace(vaccineType)) {
-                throw new ArgumentException($"'{nameof(vaccineType)}' cannot be null or whitespace", nameof(vaccineType));
+                throw new ArgumentNullException(nameof(vaccineType), $"'{nameof(vaccineType)}' cannot be null or whitespace");
             }
 
             this.vaccineType = vaccineType;
@@ -30,7 +30,7 @@ namespace Cowin.Watch.Core
         public static VaccineType From(string vaccineType)
         {
             if (All.Any(vaccine => vaccine.Equals(vaccineType))) {
-                return new VaccineType(vaccineType);
+                return All.Single(vaccine => vaccine.Equals(vaccineType));
             }
             throw new ArgumentOutOfRangeException($"{vaccineType} is not a supported vaccineType!");
         }
@@ -49,5 +49,6 @@ namespace Cowin.Watch.Core
 
         public override string ToString() => vaccineType;
 
+        public override bool Equals(object obj) => Equals((VaccineType)obj);
     }
 }

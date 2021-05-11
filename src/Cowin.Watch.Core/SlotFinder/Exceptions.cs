@@ -1,15 +1,25 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Cowin.Watch.Core.SlotFinder
 {
     [Serializable]
     public class InvalidConstraintException : Exception
     {
-        private readonly string constraintType;
-
-        public InvalidConstraintException(string constraintType)
+        public InvalidConstraintException()
         {
-            this.constraintType = constraintType;
+        }
+
+        public InvalidConstraintException(string message) : base(message)
+        {
+        }
+
+        public InvalidConstraintException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
+        protected InvalidConstraintException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
         }
     }
 }

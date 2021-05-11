@@ -11,7 +11,7 @@ namespace Cowin.Watch.Core
 {
     public class CowinApiHttpClient : ICowinApiClient
     {
-        private HttpClient httpClient;
+        private readonly HttpClient httpClient;
         private readonly ILogger logger;
 
         public CowinApiHttpClient(HttpClient httpClient, ILogger logger)
@@ -51,9 +51,9 @@ namespace Cowin.Watch.Core
             switch (response.StatusCode) {
                 case HttpStatusCode.Unauthorized:
                 case HttpStatusCode.Forbidden:
-                    throw new UnauthorizedAPIAccessException();
+                    throw new UnauthorizedApiAccessException();
                 case HttpStatusCode.NotFound:
-                    throw new NotFoundAPIException();
+                    throw new NotFoundApiException();
                 default:
                     throw new UnexpectedResponseException();
             }

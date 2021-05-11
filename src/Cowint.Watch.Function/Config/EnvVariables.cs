@@ -5,11 +5,12 @@ namespace Cowin.Watch.Function.Config
 {
     public static class EnvVariables
     {
-        public static readonly string KEY_SearchByVaccine = "SearchByVaccine";
-        public static readonly string KEY_CowinBaseUrl = "CowinBaseUrl";
-        public static readonly string KEY_DistrictId = "DistrictId";
+        static readonly string KEY_SearchByVaccine = "SearchByVaccine";
+        static readonly string KEY_CowinBaseUrl = "CowinBaseUrl";
+        static readonly string KEY_DistrictId = "DistrictId";
+        static readonly string KEY_Pincode = "Pincode";
 
-        public static VaccineType SearchByVaccine()
+        internal static VaccineType SearchByVaccine()
         {
             var envValue = Environment.GetEnvironmentVariable(KEY_SearchByVaccine);
             if (String.IsNullOrWhiteSpace(envValue)) {
@@ -18,7 +19,7 @@ namespace Cowin.Watch.Function.Config
             return VaccineType.From(envValue);
         }
 
-        public static Uri CowinBaseUrl()
+        internal static Uri CowinBaseUrl()
         {
             var envValue = Environment.GetEnvironmentVariable(KEY_CowinBaseUrl);
             return new Uri(envValue);
@@ -28,6 +29,15 @@ namespace Cowin.Watch.Function.Config
         {
             var envValue = Environment.GetEnvironmentVariable(KEY_DistrictId);
             return Core.DistrictId.FromInt(int.Parse(envValue));
+        }
+
+        internal static Pincode Pincode()
+        {
+            var envValue = Environment.GetEnvironmentVariable(KEY_Pincode);
+            if (String.IsNullOrWhiteSpace(envValue)) {
+                return null;
+            }
+            return Core.Pincode.FromString(envValue);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Cowin.Watch.Core
     {
         public DateTimeOffset DateFrom { get; }
 
-        public FinderFilterBase(DateTimeOffset dateFrom)
+        protected FinderFilterBase(DateTimeOffset dateFrom)
         {
             DateFrom = dateFrom;
         }

@@ -18,14 +18,12 @@ namespace Cowin.Watch.Function
                 client.DefaultRequestHeaders.Accept
                 .Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 client.DefaultRequestHeaders.UserAgent
-                .Add(new ProductInfoHeaderValue("cowin-watch", "0.7.0"));
+                .Add(new ProductInfoHeaderValue("cowin-watch", "1.2.0"));
                 client.DefaultRequestHeaders.AcceptLanguage
                 .Add(new StringWithQualityHeaderValue("en-US", 0.9));
             });
 
-            builder.Services.AddSingleton<SlotFinderByDistrictId>(provider =>
-            new SlotFinderByDistrictId(provider.GetService<CowinApiHttpClient>(), EnvVariables.DistrictId()));
-
+            builder.Services.AddScoped<IFunctionConfig>(_ => FunctionConfigFactory.FromEnvironment());
         }
     }
 }

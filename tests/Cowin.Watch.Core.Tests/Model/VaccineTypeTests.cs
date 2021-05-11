@@ -28,6 +28,16 @@ namespace Cowin.Watch.Core
         }
 
         [TestMethod()]
+        public void WhenGeneratedFromInvalid_Then_ArgumentExceptionIsThrown()
+        {
+            var invalidVaccineType = String.Empty;
+
+            Action act = () => VaccineType.From(invalidVaccineType);
+
+            Assert.ThrowsException<ArgumentOutOfRangeException>(act);
+        }
+
+        [TestMethod()]
         public void When_Generated_From_covishield_object_equals_CovidShield_Test()
         {
             var expected = VaccineType.CovidShield();

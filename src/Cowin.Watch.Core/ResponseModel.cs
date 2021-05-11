@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 
 namespace Cowin.Watch.Core
 {
-    // Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
     public class VaccineFee
     {
         [JsonPropertyName("vaccine")]

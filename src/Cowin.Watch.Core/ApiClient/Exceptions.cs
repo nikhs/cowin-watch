@@ -25,41 +25,41 @@ namespace Cowin.Watch.Core
     }
 
     [Serializable]
-    public class NotFoundAPIException : Exception
+    public class NotFoundApiException : Exception
     {
-        public NotFoundAPIException()
+        public NotFoundApiException()
         {
         }
 
-        public NotFoundAPIException(string message) : base(message)
+        public NotFoundApiException(string message) : base(message)
         {
         }
 
-        public NotFoundAPIException(string message, Exception innerException) : base(message, innerException)
+        public NotFoundApiException(string message, Exception innerException) : base(message, innerException)
         {
         }
 
-        protected NotFoundAPIException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected NotFoundApiException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }
 
     [Serializable]
-    public class UnauthorizedAPIAccessException : Exception
+    public class UnauthorizedApiAccessException : Exception
     {
-        public UnauthorizedAPIAccessException()
+        public UnauthorizedApiAccessException()
         {
         }
 
-        public UnauthorizedAPIAccessException(string message) : base(message)
+        public UnauthorizedApiAccessException(string message) : base(message)
         {
         }
 
-        public UnauthorizedAPIAccessException(string message, Exception innerException) : base(message, innerException)
+        public UnauthorizedApiAccessException(string message, Exception innerException) : base(message, innerException)
         {
         }
 
-        protected UnauthorizedAPIAccessException(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected UnauthorizedApiAccessException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }
