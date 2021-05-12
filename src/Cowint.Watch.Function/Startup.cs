@@ -3,8 +3,10 @@ using Cowin.Watch.Function.Config;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
 
 [assembly: FunctionsStartup(typeof(Cowin.Watch.Function.Startup))]
+[assembly: InternalsVisibleTo("Cowin.Watch.Core.Tests")]
 
 namespace Cowin.Watch.Function
 {
@@ -12,8 +14,10 @@ namespace Cowin.Watch.Function
     {
         public override void Configure(IFunctionsHostBuilder builder)
         {
+            builder.Services.AddScoped<IFunctionConfig>(_ => FunctionConfigFactory.FromEnvironment());
+
             builder.Services.AddHttpClient<CowinApiHttpClient>(client => {
-                client.BaseAddress = EnvVariables.CowinBaseUrl();
+                client.BaseAddress = EnvironmentConfigSource.Get().CowinBaseUrl();
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Accept
                 .Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -23,7 +27,6 @@ namespace Cowin.Watch.Function
                 .Add(new StringWithQualityHeaderValue("en-US", 0.9));
             });
 
-            builder.Services.AddScoped<IFunctionConfig>(_ => FunctionConfigFactory.FromEnvironment());
         }
     }
 }
