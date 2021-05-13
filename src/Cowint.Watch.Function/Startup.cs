@@ -2,6 +2,7 @@
 using Cowin.Watch.Function.Config;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 

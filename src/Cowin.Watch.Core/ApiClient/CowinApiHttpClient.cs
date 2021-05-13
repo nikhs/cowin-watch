@@ -12,9 +12,9 @@ namespace Cowin.Watch.Core
     public class CowinApiHttpClient : ICowinApiClient
     {
         private readonly HttpClient httpClient;
-        private readonly ILogger logger;
+        private readonly ILogger<CowinApiHttpClient> logger;
 
-        public CowinApiHttpClient(HttpClient httpClient, ILogger logger)
+        public CowinApiHttpClient(HttpClient httpClient, ILogger<CowinApiHttpClient> logger)
         {
             this.httpClient = httpClient;
             this.logger = logger;
