@@ -39,4 +39,30 @@ namespace Cowin.Watch.Core.Tests.Lib
 
         public static ILogger GetInstance() => new ListLogger();
     }
+
+    public class ListLogger<T> : ILogger<T> where T: class
+    {
+        private readonly ListLogger baseLogger;
+        private readonly string contextType;
+
+        public ListLogger() : base()
+        {
+            baseLogger = new ListLogger();
+            contextType = typeof(T).ToString();
+        }
+
+        public IDisposable BeginScope<TState>(TState state) => baseLogger.BeginScope(state);
+
+        public bool IsEnabled(LogLevel logLevel) => baseLogger.IsEnabled(logLevel);
+
+        public new void Log<TState>(LogLevel logLevel,
+                                EventId eventId,
+                                TState state,
+                                Exception exception,
+                                Func<TState, Exception, string> formatter)
+        {
+            Func<TState, Exception, string> formatterWithContext = (state, exception) => $"{contextType}-{formatter(state, exception)}";
+            baseLogger.Log<TState>(logLevel, eventId, state, exception, formatterWithContext);
+        }
+    }
 }

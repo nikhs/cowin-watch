@@ -8,8 +8,7 @@
         }
       },
       "logLevel": {
-        "Cowin.Watch.Function.Watch": "Information",
-        "Cowin.Watch.Core.CowinApiHttpClient" : "Information"
+        "Cowin.Watch.": "Information"
       }
     }
 }

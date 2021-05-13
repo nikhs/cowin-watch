@@ -43,7 +43,7 @@ namespace Cowin.Watch.Core.Tests
 
         public static ICowinApiClient GetClient()
         {
-            return new CowinApiHttpClient(liveHttpClient, new ListLogger());
+            return new CowinApiHttpClient(liveHttpClient, new ListLogger<CowinApiHttpClient>());
         }
     }
 }

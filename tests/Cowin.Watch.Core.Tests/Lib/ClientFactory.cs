@@ -8,22 +8,22 @@ namespace Cowin.Watch.Core.Tests.Lib
     public static class ClientFactory
     {
         public static ICowinApiClient GetCowinClientForHandler(DelegatingHandler delegatingHandler) =>
-            new CowinApiHttpClient(GetDefaultHttpClient(delegatingHandler), new ListLogger());
+            new CowinApiHttpClient(GetDefaultHttpClient(delegatingHandler), new ListLogger<CowinApiHttpClient>());
 
         public static ICowinApiClient GetHandlerFor_204() =>
-            new CowinApiHttpClient(GetDefaultHttpClient(new NoContentResponseHandler()), new ListLogger());
+            new CowinApiHttpClient(GetDefaultHttpClient(new NoContentResponseHandler()), new ListLogger<CowinApiHttpClient>());
 
         public static ICowinApiClient GetHandlerFor_200<TContent>(TContent content) =>
-            new CowinApiHttpClient(GetDefaultHttpClient(OkResponseHandler<TContent>.ForContent<TContent>(content)), new ListLogger());
+            new CowinApiHttpClient(GetDefaultHttpClient(OkResponseHandler<TContent>.ForContent<TContent>(content)), new ListLogger<CowinApiHttpClient>());
 
         public static ICowinApiClient GetDefaultHandlerFor_200()
         {
             string content = SampleJsonFactory.GetDefaultCentersApiResponseJson();
-            return new CowinApiHttpClient(GetDefaultHttpClient(OkResponseHandler<string>.ForContent<string>(content)), new ListLogger());
+            return new CowinApiHttpClient(GetDefaultHttpClient(OkResponseHandler<string>.ForContent<string>(content)), new ListLogger<CowinApiHttpClient>());
         }
 
         public static ICowinApiClient GetHandlerFor_DelayedResponse() =>
-            new CowinApiHttpClient(GetDefaultHttpClient(DelayedResponseHandler.Instance), new ListLogger());
+            new CowinApiHttpClient(GetDefaultHttpClient(DelayedResponseHandler.Instance), new ListLogger<CowinApiHttpClient>());
 
         public static HttpClient GetDefaultHttpClient(HttpMessageHandler httpMessageHandler) =>
             new HttpClient(httpMessageHandler)
