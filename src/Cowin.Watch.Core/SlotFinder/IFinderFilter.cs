@@ -37,7 +37,7 @@ namespace Cowin.Watch.Core
 
             return result.Centers
                 .Where(center => center.Sessions
-                .Any(session => session?.Slots?.Count > 0));
+                .Any(session => session.AvailableCapacity > 0));
         };
 
         protected abstract Func<Center, bool> AdditionalCenterFilter { get; }
