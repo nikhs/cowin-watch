@@ -61,7 +61,8 @@ namespace Cowin.Watch.Core
 
         private static bool RequestHasJsonResponse(HttpResponseMessage response)
         {
-            return response.IsSuccessStatusCode && response.Content.Headers.ContentType.MediaType == "application/json";
+            return response.StatusCode == HttpStatusCode.OK && 
+                response.Content.Headers.ContentType.MediaType == "application/json";
         }
     }
 }

@@ -17,10 +17,10 @@ namespace Cowin.Watch.Core
             this.districtId = districtId ?? throw new ArgumentNullException(nameof(districtId));
         }
 
-        public async Task<IEnumerable<Center>> FindBy(IFinderFilter finderFilter, CancellationToken none)
+        public async Task<IEnumerable<Center>> FindBy(IFinderFilter finderFilter, CancellationToken cancellationToken)
         {
             var result = await cowinApiHttpClient
-                .GetSessionsForDistrictAndDateAsync(districtId, finderFilter.DateFrom, CancellationToken.None);
+                .GetSessionsForDistrictAndDateAsync(districtId, finderFilter.DateFrom, cancellationToken);
             return finderFilter.Filter(result);
         }
 
@@ -39,10 +39,10 @@ namespace Cowin.Watch.Core
             this.pincode = pincode ?? throw new ArgumentNullException(nameof(pincode));
         }
         
-        public async Task<IEnumerable<Center>> FindBy(IFinderFilter finderFilter, CancellationToken none)
+        public async Task<IEnumerable<Center>> FindBy(IFinderFilter finderFilter, CancellationToken cancellationToken)
         {
             var result = await cowinApiHttpClient
-                .GetSessionsForPincodeAndDateAsync(pincode, finderFilter.DateFrom, CancellationToken.None);
+                .GetSessionsForPincodeAndDateAsync(pincode, finderFilter.DateFrom, cancellationToken);
             return finderFilter.Filter(result);
         }
 

@@ -7,6 +7,6 @@ namespace Cowin.Watch.Core
 {
     public interface ISlotFinder
     {
-        public Task<IEnumerable<Center>> FindBy(IFinderFilter finderFilter, CancellationToken none);
+        public Task<IEnumerable<Center>> FindBy(IFinderFilter finderFilter, CancellationToken cancellationToken);
     }
 }
