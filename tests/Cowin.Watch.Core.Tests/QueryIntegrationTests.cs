@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Cowin.Watch.Core.Tests
 {
-    [TestClass]
+    //[TestClass]
     public class QueryIntegrationTests
     {
 

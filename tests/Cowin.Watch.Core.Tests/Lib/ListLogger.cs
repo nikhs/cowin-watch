@@ -55,7 +55,7 @@ namespace Cowin.Watch.Core.Tests.Lib
 
         public bool IsEnabled(LogLevel logLevel) => baseLogger.IsEnabled(logLevel);
 
-        public new void Log<TState>(LogLevel logLevel,
+        public void Log<TState>(LogLevel logLevel,
                                 EventId eventId,
                                 TState state,
                                 Exception exception,

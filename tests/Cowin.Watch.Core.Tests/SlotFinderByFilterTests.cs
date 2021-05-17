@@ -38,5 +38,53 @@ namespace Cowin.Watch.Core.Tests
             var actualResult = await slotFinder.FindBy(dateFromFilter, CancellationToken.None);
             Assert.IsNotNull(actualResult);
         }
+
+        [TestMethod]
+        public async Task WhenSearchingByDistrict_ResultHasSessions_TypeIsCentersWithSession()
+        {
+            var district = DistrictId.FromInt(56);
+            var from = DateTimeOffset.Parse("2-May-2021");
+            var cowinApiClient = ClientFactory.GetDefaultHandlerFor_200() as CowinApiHttpClient;
+            ISlotFinder slotFinder = SlotFinderFactory.For(cowinApiClient, FinderConstraintFactory.From(district));
+            IFinderFilter dateFromFilter = FinderFilterFactory.From(from);
+            Type expectedType = typeof(CentersWithSessions);
+
+            var actualResult = await slotFinder.FindBy(dateFromFilter, CancellationToken.None);
+
+            Assert.IsInstanceOfType(actualResult, expectedType);
+        }
+
+
+        [TestMethod]
+        public async Task WhenSearchingByDistrict_ResultHasNoSessions_TypeIsCentersWithoutSession()
+        {
+            var district = DistrictId.FromInt(56);
+            var from = DateTimeOffset.Parse("2-May-2021");
+            string responseWithoutSlots = SampleJsonFactory.GenerateResponseForHospitalAndVaccineWithoutSlots("Hosp");
+            var cowinApiClient = ClientFactory.GetHandlerFor_200(responseWithoutSlots) as CowinApiHttpClient;
+            ISlotFinder slotFinder = SlotFinderFactory.For(cowinApiClient, FinderConstraintFactory.From(district));
+            IFinderFilter dateFromFilter = FinderFilterFactory.From(from);
+            Type expectedType = typeof(CentersWithoutSessions);
+
+            var actualResult = await slotFinder.FindBy(dateFromFilter, CancellationToken.None);
+
+            Assert.IsInstanceOfType(actualResult, expectedType);
+        }
+
+
+        [TestMethod]
+        public async Task WhenSearchingByDistrict_ResultIsEmpty_TypeIsNullCenters()
+        {
+            var district = DistrictId.FromInt(56);
+            var from = DateTimeOffset.Parse("2-May-2021");
+            var cowinApiClient = ClientFactory.GetHandlerFor_204() as CowinApiHttpClient;
+            ISlotFinder slotFinder = SlotFinderFactory.For(cowinApiClient, FinderConstraintFactory.From(district));
+            IFinderFilter dateFromFilter = FinderFilterFactory.From(from);
+            Type expectedType = typeof(NullCenters);
+
+            var actualResult = await slotFinder.FindBy(dateFromFilter, CancellationToken.None);
+
+            Assert.IsInstanceOfType(actualResult, expectedType);
+        }
     }
 }
