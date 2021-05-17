@@ -121,6 +121,12 @@ namespace Cowin.Watch.Core.Tests
                 .All(s => expectedVaccine.Equals(s.Vaccine)));
         }
 
+        private bool ResultHasExpectedVaccine(ICentersResponse actualResult, VaccineType expectedVaccine)
+        {
+            return actualResult
+                .HasVaccine(expectedVaccine);
+        }
+
         private ISlotFinder GetSlotFinderForDistrict_DefaultResponse(int districtId)
         {
             var cowinApiClient = ClientFactory.GetDefaultHandlerFor_200() as CowinApiHttpClient;

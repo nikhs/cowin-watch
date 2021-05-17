@@ -34,7 +34,7 @@ namespace Cowin.Watch.Core.Tests.Model
         [TestMethod]
         public void WhenResponseHasNoData_CentersResponseIsGenerated_TypeIsNullResponse()
         {
-            var emptyResult = CentersEnumerable.GetFor(string.Empty);
+            var emptyResult = CentersEnumerable.GetEmpty();
             Type expectedType = typeof(NullCenters);
 
             var actualResponse = CentersResponseFactory.GetFor(emptyResult);
