@@ -41,20 +41,29 @@ namespace Cowin.Watch.Function
                 { "Constraint", constraint.GetType().ToString() } ,
                 { "SlotFinder", slotFinder.GetType().ToString() } ,
                 { "Filter", finderFilter.GetType().ToString() }
-            })) 
+            })) {
 
-            if (centersFound.Any()) {
-                    logger.LogInformation("{Status}", "found");
-                    foreach (var center in centersFound.Where(c => c.Sessions != null)) {
-                        foreach (var session in center.Sessions) {
-                            logger.LogInformation("{CenterName} has {vaccine} on {date} at {slot}",
-                                center.Name, session.Vaccine, session.Date, session.Slots);
-                        }
+                logger.LogInformation("{HasSessions}", centersFound.HasSessions);
+                centersFound.ForEach(c => {
+
+                    var sessionDetails = from session in c.Sessions
+                            select new {
+                                CenterName = c.Name,
+                                CenterLocation = c.BlockName,
+                                SessionDate = session.Date,
+                                SessionSlots = string.Join(",", session.Slots ?? Enumerable.Empty<string>()),
+                                SessionVaccine = session.Vaccine
+                            };
+
+                    foreach (var detail in sessionDetails) {
+                        logger.LogInformation("Found {Vaccine} at {CenterName} in {CenterLocation} on {SessionDate}. AvailableSlots - {Slots}",
+                            detail.SessionVaccine, detail.CenterName, detail.CenterLocation, detail.SessionDate, detail.SessionSlots);
                     }
-                }
-            else {
-                    logger.LogInformation("{Status}", "None");
-                }
+                });
+
+                centersFound.None(() => logger.LogInformation("No slots found!"));
+            }
+            
         }
     }
 }
