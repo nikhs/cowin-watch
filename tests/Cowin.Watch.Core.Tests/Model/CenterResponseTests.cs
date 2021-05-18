@@ -127,7 +127,7 @@ namespace Cowin.Watch.Core.Tests.Model
 
             var actualResponse = CentersResponseFactory.GetFor(centersResultWithSessions);
 
-            Assert.That.ActionWasExecuted<Center>(actualResponse.ForEach);
+            Assert.That.ActionWasExecuted<ICenterSessionDetail>(actualResponse.ForEach);
         }
 
         [TestMethod]
@@ -138,7 +138,7 @@ namespace Cowin.Watch.Core.Tests.Model
             var actualResponse = CentersResponseFactory.GetFor(centersResultWithSessions);
 
             int expectedCount = 1;
-            Assert.That.ActionWasExecutedNTime<Center>(actualResponse.ForEach, expectedCount);
+            Assert.That.ActionWasExecutedNTime<ICenterSessionDetail>(actualResponse.ForEach, expectedCount);
         }
 
         [TestMethod]
@@ -148,7 +148,7 @@ namespace Cowin.Watch.Core.Tests.Model
 
             var actualResponse = CentersResponseFactory.GetFor(centersResultWithoutSessions);
 
-            Assert.That.ActionWasNotExecuted<Center>(actualResponse.ForEach);
+            Assert.That.ActionWasNotExecuted<ICenterSessionDetail>(actualResponse.ForEach);
         }
 
         [TestMethod]
@@ -158,7 +158,7 @@ namespace Cowin.Watch.Core.Tests.Model
 
             var actualResponse = CentersResponseFactory.GetFor(emptyResult);
 
-            Assert.That.ActionWasNotExecuted<Center>(actualResponse.ForEach);
+            Assert.That.ActionWasNotExecuted<ICenterSessionDetail>(actualResponse.ForEach);
         }
 
         [TestMethod]

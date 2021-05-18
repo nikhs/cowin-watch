@@ -27,7 +27,7 @@ namespace Cowin.Watch.Function
 
         [FunctionName(STARTWATCH_HTTP)]
         public async Task Run(
-            [TimerTrigger("*/15 * * * * *")] TimerInfo myTimer,
+            [TimerTrigger("0 */30 * * * *")] TimerInfo myTimer,
             CancellationToken cancellationToken)
         {
             logger.LogInformation("C# {FunctionName} function executed at: {FunctionExecDate}", STARTWATCH_HTTP, DateTimeOffset.Now);
@@ -35,33 +35,21 @@ namespace Cowin.Watch.Function
             var constraint = fnConfig.GetConstraint();
             var slotFinder = SlotFinderFactory.For(cowinApiClient, constraint);
             var finderFilter = fnConfig.GetFilter();
-            var centersFound = await slotFinder.FindBy(finderFilter, cancellationToken);
+            var sessionsFound = await slotFinder.FindBy(finderFilter, cancellationToken);
 
             using (logger.BeginScope<Dictionary<string, string>>(new Dictionary<string, string>() {
-                { "Constraint", constraint.GetType().ToString() } ,
-                { "SlotFinder", slotFinder.GetType().ToString() } ,
-                { "Filter", finderFilter.GetType().ToString() }
+                ["Constraint"] = constraint.GetType().ToString(),
+                ["SlotFinder"] = slotFinder.GetType().ToString(),
+                ["Filter"] = finderFilter.GetType().ToString()
             })) {
 
-                logger.LogInformation("{HasSessions}", centersFound.HasSessions);
-                centersFound.ForEach(c => {
-
-                    var sessionDetails = from session in c.Sessions
-                            select new {
-                                CenterName = c.Name,
-                                CenterLocation = c.BlockName,
-                                SessionDate = session.Date,
-                                SessionSlots = string.Join(",", session.Slots ?? Enumerable.Empty<string>()),
-                                SessionVaccine = session.Vaccine
-                            };
-
-                    foreach (var detail in sessionDetails) {
+                logger.LogInformation("{HasSessions}", sessionsFound.HasSessions);
+                sessionsFound.ForEach(detail => {
                         logger.LogInformation("Found {Vaccine} at {CenterName} in {CenterLocation} on {SessionDate}. AvailableSlots - {Slots}",
                             detail.SessionVaccine, detail.CenterName, detail.CenterLocation, detail.SessionDate, detail.SessionSlots);
-                    }
                 });
 
-                centersFound.None(() => logger.LogInformation("No slots found!"));
+                sessionsFound.None(() => logger.LogInformation("No slots found!"));
             }
             
         }

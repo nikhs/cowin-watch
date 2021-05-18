@@ -9,7 +9,7 @@ namespace Cowin.Watch.Core
         bool HasSessions { get; }
 
         bool HasVaccine(VaccineType expectedVaccine);
-        void ForEach(Action<Center> action);
+        void ForEach(Action<ICenterSessionDetail> action);
         void None(Action noneAction);
     }
 
@@ -38,20 +38,20 @@ namespace Cowin.Watch.Core
 
     public class CentersWithSessions : ICentersResponse
     {
-        private readonly IEnumerable<Center> centersWithSessions;
+        private readonly IEnumerable<ICenterSessionDetail> centerSessionDetails;
 
 
-        public CentersWithSessions(IEnumerable<Center> centersWithSessions)
+        public CentersWithSessions(IEnumerable<ICenterSessionDetail> centersWithSessions)
         {
-            this.centersWithSessions = centersWithSessions;
+            this.centerSessionDetails = centersWithSessions;
         }
 
         public bool HasSessions => true;
-        public bool HasVaccine(VaccineType expectedVaccine) => centersWithSessions.Any(c => c.Sessions.Any(s => expectedVaccine.Equals(s.Vaccine ?? string.Empty)));
+        public bool HasVaccine(VaccineType expectedVaccine) => centerSessionDetails.Any(c => c.SessionVaccine.Equals(expectedVaccine));
 
-        public void ForEach(Action<Center> action)
+        public void ForEach(Action<ICenterSessionDetail> action)
         {
-            foreach (var center in centersWithSessions) {
+            foreach (var center in centerSessionDetails) {
                 action(center);
             }
         }
@@ -62,7 +62,8 @@ namespace Cowin.Watch.Core
         {
             Validate(centers);
             var centersWithSessions = GeCentersWithSessions(centers);
-            return new CentersWithSessions(centersWithSessions);
+            var centerSessionDetails = CenterSessionDetail.FromCenterRange(centersWithSessions);
+            return new CentersWithSessions(centerSessionDetails);
         }
 
         private static IEnumerable<Center> GeCentersWithSessions(IEnumerable<Center> centers)
@@ -75,7 +76,7 @@ namespace Cowin.Watch.Core
             if (! centers.Any()) throw new ArgumentNullException(nameof(centers));
         }
 
-        public bool Any() => centersWithSessions?.Any() ?? false;
+        public bool Any() => centerSessionDetails?.Any() ?? false;
     }
 
     public class CentersWithoutSessions : ICentersResponse
@@ -89,7 +90,7 @@ namespace Cowin.Watch.Core
 
         public bool HasSessions => false;
         public bool HasVaccine(VaccineType expectedVaccine) => false;
-        public void ForEach(Action<Center> action) { }
+        public void ForEach(Action<ICenterSessionDetail> action) { }
         public void None(Action noneAction) => noneAction();
 
 
@@ -123,7 +124,7 @@ namespace Cowin.Watch.Core
 
         public bool HasSessions => false;
         public bool HasVaccine(VaccineType expectedVaccine) => false;
-        public void ForEach(Action<Center> action) { }
+        public void ForEach(Action<ICenterSessionDetail> action) { }
         public void None(Action noneAction) => noneAction();
     }
 }
