@@ -25,7 +25,7 @@ namespace Cowin.Watch.Core
             if (String.IsNullOrWhiteSpace(pincode)) {
                 throw new ArgumentException($"'{nameof(pincode)}' cannot be null or whitespace", nameof(pincode));
             }
-            if(pincode.Length != 6 || pincode.Any(digit => !Char.IsDigit(digit))) {
+            if (pincode.Length != 6 || pincode.Any(digit => !Char.IsDigit(digit))) {
                 throw new ArgumentException($"'{nameof(pincode)}' should be 6 numerical digits.", nameof(pincode));
             }
         }

@@ -1,12 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Cowin.Watch;
-using Cowin.Watch.Core.Tests.Lib;
-using Microsoft.Extensions.Logging;
-using System.Threading;
+﻿using Cowin.Watch.Core.Tests.Lib;
 using Cowin.Watch.Function;
+using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Cowin.Watch.Core.Tests
@@ -24,11 +20,11 @@ namespace Cowin.Watch.Core.Tests
 
             await GetWatchFn(logger, fnConfig).Run(null, CancellationToken.None);
 
-            Assert.IsNotNull(logger);  
+            Assert.IsNotNull(logger);
         }
 
         private ILogger GetLogger() => new ListLogger();
-        private ILogger<T> GetLogger<T>() where T: class => new ListLogger<T>();
+        private ILogger<T> GetLogger<T>() where T : class => new ListLogger<T>();
 
         private Function.Watch GetWatchFn<T>(ILogger<Watch.Function.Watch> logger, string expectedReponse, IFunctionConfig fnConfig)
         {

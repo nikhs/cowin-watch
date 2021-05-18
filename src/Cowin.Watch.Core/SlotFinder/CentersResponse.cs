@@ -73,7 +73,7 @@ namespace Cowin.Watch.Core
 
         private static void Validate(IEnumerable<Center> centers)
         {
-            if (! centers.Any()) throw new ArgumentNullException(nameof(centers));
+            if (!centers.Any()) throw new ArgumentNullException(nameof(centers));
         }
 
         public bool Any() => centerSessionDetails?.Any() ?? false;

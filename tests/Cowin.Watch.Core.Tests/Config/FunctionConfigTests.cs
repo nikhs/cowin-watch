@@ -1,9 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Cowin.Watch.Function;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Cowin.Watch.Core;
+﻿using Cowin.Watch.Core;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Cowin.Watch.Function
 {

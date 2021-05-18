@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Cowin.Watch.Core
+﻿namespace Cowin.Watch.Core
 {
     public static class FinderConstraintFactory
     {

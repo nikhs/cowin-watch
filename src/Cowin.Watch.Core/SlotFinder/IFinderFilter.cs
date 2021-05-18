@@ -57,7 +57,7 @@ namespace Cowin.Watch.Core
     {
         private readonly VaccineType vaccineType;
 
-        public VaccineFinder(VaccineType vaccineType, DateTimeOffset dateFrom): base(dateFrom)
+        public VaccineFinder(VaccineType vaccineType, DateTimeOffset dateFrom) : base(dateFrom)
         {
             this.vaccineType = vaccineType ?? throw new ArgumentNullException(nameof(vaccineType));
         }

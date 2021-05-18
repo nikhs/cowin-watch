@@ -1,6 +1,4 @@
-﻿using Cowin.Watch.Core;
-using Cowin.Watch.Function.Config;
-using System;
+﻿using Cowin.Watch.Function.Config;
 using System.Collections.Generic;
 
 namespace Cowin.Watch.Function

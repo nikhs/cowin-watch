@@ -2,8 +2,6 @@
 using Cowin.Watch.Core.Tests.Lib.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Cowin.Watch.Core.Tests.Model
 {
@@ -67,7 +65,6 @@ namespace Cowin.Watch.Core.Tests.Model
         public void WhenResponseHasNoData_CentersResponseIsGenerated_SessionsFoundIsFalse()
         {
             var emptyResult = CentersEnumerable.GetEmpty();
-            Type expectedType = typeof(NullCenters);
 
             var actualResponse = CentersResponseFactory.GetFor(emptyResult);
 
@@ -112,7 +109,6 @@ namespace Cowin.Watch.Core.Tests.Model
         public void WhenResponseHasNoData_CentersResponseIsGenerated_HasVaccineIsFalse()
         {
             var emptyResult = CentersEnumerable.GetEmpty();
-            Type expectedType = typeof(NullCenters);
 
             var actualResponse = CentersResponseFactory.GetFor(emptyResult);
 

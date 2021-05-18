@@ -40,7 +40,7 @@ namespace Cowin.Watch.Core.Tests.Lib
         public static ILogger GetInstance() => new ListLogger();
     }
 
-    public class ListLogger<T> : ILogger<T> where T: class
+    public class ListLogger<T> : ILogger<T> where T : class
     {
         private readonly ListLogger baseLogger;
         private readonly string contextType;

@@ -35,7 +35,7 @@ namespace Cowin.Watch.Core
         private async Task<Root> GetSessions(string requestUri, CancellationToken cancellationToken)
         {
             using (logger.BeginScope("{nameof(ICowinApiClient)}:", nameof(CowinApiHttpClient)))
-            logger.LogDebug("Querying {requestUri}", requestUri);
+                logger.LogDebug("Querying {requestUri}", requestUri);
 
             using HttpRequestMessage hrm = new HttpRequestMessage(HttpMethod.Get, requestUri);
             var response = await httpClient.SendAsync(hrm, cancellationToken);
@@ -61,7 +61,7 @@ namespace Cowin.Watch.Core
 
         private static bool RequestHasJsonResponse(HttpResponseMessage response)
         {
-            return response.StatusCode == HttpStatusCode.OK && 
+            return response.StatusCode == HttpStatusCode.OK &&
                 response.Content.Headers.ContentType.MediaType == "application/json";
         }
     }

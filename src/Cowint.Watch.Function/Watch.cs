@@ -1,10 +1,8 @@
 using Cowin.Watch.Core;
-using Cowin.Watch.Function.Config;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -45,13 +43,13 @@ namespace Cowin.Watch.Function
 
                 logger.LogInformation("{HasSessions}", sessionsFound.HasSessions);
                 sessionsFound.ForEach(detail => {
-                        logger.LogInformation("Found {Vaccine} at {CenterName} in {CenterLocation} on {SessionDate}. AvailableSlots - {Slots}",
-                            detail.SessionVaccine, detail.CenterName, detail.CenterLocation, detail.SessionDate, detail.SessionSlots);
+                    logger.LogInformation("Found {Vaccine} at {CenterName} in {CenterLocation} on {SessionDate}. AvailableSlots - {Slots}",
+                        detail.SessionVaccine, detail.CenterName, detail.CenterLocation, detail.SessionDate, detail.SessionSlots);
                 });
 
                 sessionsFound.None(() => logger.LogInformation("No slots found!"));
             }
-            
+
         }
     }
 }

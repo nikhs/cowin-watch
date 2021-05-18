@@ -1,5 +1,4 @@
 ﻿using Cowin.Watch.Core.SlotFinder;
-using System;
 
 namespace Cowin.Watch.Core
 {

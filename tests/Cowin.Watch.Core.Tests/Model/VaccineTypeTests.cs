@@ -1,8 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Cowin.Watch.Core;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Cowin.Watch.Core
 {

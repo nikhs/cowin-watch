@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -38,7 +36,7 @@ namespace Cowin.Watch.Core
             this.cowinApiHttpClient = cowinApiHttpClient ?? throw new ArgumentNullException(nameof(cowinApiHttpClient));
             this.pincode = pincode ?? throw new ArgumentNullException(nameof(pincode));
         }
-        
+
         public async Task<ICentersResponse> FindBy(IFinderFilter finderFilter, CancellationToken cancellationToken)
         {
             var result = await cowinApiHttpClient

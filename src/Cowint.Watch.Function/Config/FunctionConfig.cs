@@ -29,7 +29,7 @@ namespace Cowin.Watch.Function
         public IFinderFilter GetFilter()
         {
             return configSource.SearchByVaccine() switch {
-                VaccineType vaccineType  => FinderFilterFactory.From(DateTime.Now, vaccineType),
+                VaccineType vaccineType => FinderFilterFactory.From(DateTime.Now, vaccineType),
                 _ => FinderFilterFactory.From(DateTime.Now),
             };
         }

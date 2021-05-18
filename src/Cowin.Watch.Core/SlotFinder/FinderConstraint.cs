@@ -4,7 +4,7 @@
     {
     }
 
-    internal class SearchByDistrictConstraint: IFinderConstraint
+    internal class SearchByDistrictConstraint : IFinderConstraint
     {
         public DistrictId DistrictId { get; }
 
